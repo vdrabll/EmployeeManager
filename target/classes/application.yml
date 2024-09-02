@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: EmployeeManager
+
+  security:
+    basic:
+        enabled: false
+  management:
+    security:
+        enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    url: jdbc:postgresql://localhost:5432/db
+    user: ADMIN
+    password: ADMIN
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/db
+    username: ADMIN
+    password: ADMIN
