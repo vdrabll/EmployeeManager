@@ -23,4 +23,31 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-   
+        UserDetails employee = User.builder()
+                .username("s48358")
+                .password(passwordEncoder.encode("s48358"))
+                .roles(AuthRole.EMPLOYEE.toString())
+                .build();
+        UserDetails chief = User.builder()
+                .username("s48778")
+                .password(passwordEncoder.encode("s48778"))
+                .roles(AuthRole.CHIEF.toString())
+                .build();
+
+        return new InMemoryUserDetailsManager(employee, chief);
+    }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+//        return http.csrf(AbstractHttpConfigurer::disable)
+//                        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/start").permitAll()
+//                        .requestMatchers("/api/v1/**").authenticated())
+//                        .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+//                        .build();
+//    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
