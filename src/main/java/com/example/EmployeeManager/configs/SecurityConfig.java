@@ -37,15 +37,6 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(employee, chief);
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//        return http.csrf(AbstractHttpConfigurer::disable)
-//                        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/start").permitAll()
-//                        .requestMatchers("/api/v1/**").authenticated())
-//                        .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-//                        .build();
-//    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

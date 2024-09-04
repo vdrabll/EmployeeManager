@@ -26,7 +26,7 @@ public class LeaveController {
     }
 
     @Operation(description = "Create new leave in database", method = "POST")
-    @PostMapping
+    @PostMapping("/create")
     public Leave createLeave(@RequestBody Leave leave) {
         return leaveService.createLeave(leave);
     }

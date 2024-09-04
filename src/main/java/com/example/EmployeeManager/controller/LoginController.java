@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/login")
 public class LoginController {
-    @PreAuthorize("hasRole('EMPLOYEE')")
+
     @GetMapping("/employee")
     public String employeeLogin() {
+
         return "";
     }
 
-    @PreAuthorize("hasRole('CHIEF')")
     @GetMapping("/сhief")
     public String chiefLogin() {
         return "";
