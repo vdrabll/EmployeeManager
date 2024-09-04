@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <table id="table" class="table table-striped mb-4">
+        <thead>
+        <tr>
+            <th><a href="personal-page.html" target="_self">Личный кабинет</a></th>
+            <th><a href="tasks-page.html" target="_self">Задачи</a></th>
+            <th><a href="salary-page.html" target="_self">Доход</a></th>
+            <th><a href="schedule-page.html" target="_self">Расписание и отпуска</a></th>
+            <th><a href="get-dismissed.html" target="_self">Увольнение</a></th>
+        </tr>
+        </thead>
+    </table>
+
+    <h1 class="text-center mb-4">Личный кабинет</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Персональная информация</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Имя и фамилия:</strong> <span id="full-name"></span></p>
+                    <p class="card-text"><strong>Email:</strong> <span id="email"></span></p>
+                    <p class="card-text"><strong>Должность:</strong> <span id="position"></span></p>
+                    <p class="card-text"><strong>Департамент:</strong> <span id="department"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Текущие проекты</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Название проекта</th>
+                            <th>Описание</th>
+                        </tr>
+                        </thead>
+                        <tbody id="projects-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Задачи сотрудника</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped" id="tasks-table">
+                        <thead>
+                        <tr>
+                            <th>Название задачи</th>
+                            <th>Статус</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tasks-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Доход сотрудника</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Общий доход за месяц:</strong> <span id="monthly-income"></span> руб.</p>
+                    <p class="card-text"><strong>Общий доход за год:</strong> <span id="annual-income"></span> руб.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    const employeeId = {employeeId};
+
+    $.ajax({
+        url: /api/v1/employees/employee/${employeeId},
+        type: "GET",
+        success: function(data) {
+
+            $("#full-name").text(data.fullName);
+            $("#email").text(data.email);
+            $("#position").text(data.role.name);
+                let departments = data.department.map(dept => dept.name).join(", ");
+                $("#department").text(departments);
+
+
+                data.projects.forEach(project => {
+                    const row = <tr>
+                        <td>${project.name}</td>
+                        <td>${project.description}</td>
+                    </tr>;
+                    $("#projects-table").append(row);
+                });
+            },
+            error: function(error) {
+                console.error("Error fetching employee data:", error);
+            }
+        });
+
+
+        $.ajax({
+            url: /api/v1/tasks/employee/${employeeId},
+            type: "GET",
+            success: function(tasks) {
+                tasks.forEach(task => {
+                    const row = <tr>
+                        <td>${task.title}</td>
+                        <td>${task.status}</td>
+                    </tr>;
+                    $("#tasks-body").append(row);
+                });
+            },
+            error: function(error) {
+                console.error("Error fetching tasks data:", error);
+            }
+        });
+
+
+        $.ajax({
+            url: /api/v1/salary/employee/${employeeId},
+            type: "GET",
+success: function(incomeData) {
+                $("#monthly-income").text(incomeData.monthlyIncome);
+                $("#annual-income").text(incomeData.annualIncome);
+            },
+            error: function(error) {
+                console.error("Error fetching income data:", error);
+            }
+        });
+</script>
+</body>
+</html>

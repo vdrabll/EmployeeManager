@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        {
+            max-width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Employees in the Department</h1>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs" id="employeeTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="working-employees-tab" data-toggle="tab" href="#working-employees" role="tab" aria-controls="working-employees" aria-selected="true">Currently Working Employees</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="dismissed-employees-tab" data-toggle="tab" href="#dismissed-employees" role="tab" aria-controls="dismissed-employees" aria-selected="false">Dismissed Employees</a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="working-employees" role="tabpanel" aria-labelledby="working-employees-tab">
+            <div id="working-employees-content">
+                <div class="alert alert-info" role="alert">Loading working employees...</div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="dismissed-employees" role="tabpanel" aria-labelledby="dismissed-employees-tab">
+            <div id="dismissed-employees-content">
+                <div class="alert alert-info" role="alert">Loading dismissed employees...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Fetching working employees from the server
+        $.ajax({
+            url: '/api/v1/employees/working',
+            type: 'GET',
+            success: function(workingEmployees) {
+                const workingEmpDiv = $('#working-employees-content');
+
+                if (workingEmployees.length) {
+                    workingEmpDiv.empty();
+
+                        workingEmployees.forEach(employee => {
+                            workingEmpDiv.append(
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a href="/employee/${employee.id}" class="text-decoration-none">${employee.fullName}</a>
+                                        </h5>
+                                        <p class="card-text">Email: ${employee.email}</p>
+                                    </div>
+                                </div>
+                            );
+                        });
+                    } else {
+                        workingEmpDiv.html('<p>No currently working employees.</p>');
+                    }
+                },
+                error: function(error) {
+                    console.error("Error fetching working employees data:", error);
+                    $('#working-employees-content').html('<p class="text-danger">Error loading working employees.</p>');
+                }
+            });
+
+            $.ajax({
+                url: '/api/v1/employees/dismissed',
+                type: 'GET',
+                success: function(dismissedEmployees) {
+                    const dismissedEmpDiv = $('#dismissed-employees-content');
+
+                    if (dismissedEmployees.length) {
+                        dismissedEmpDiv.empty();
+
+                        dismissedEmployees.forEach(employee => {
+                            dismissedEmpDiv.append(
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a href="/employee/${employee.id}" class="text-decoration-none">${employee.fullName}</a>
+                                        </h5>
+                                        <p class="card-text">Email: ${employee.email}</p>
+                                    </div>
+                                </div>
+                            );
+                        });
+                    } else {
+                        dismissedEmpDiv.html('<p>No dismissed employees.</p>');
+                    }
+                },
+                error: function(error) {
+                    console.error("Error fetching dismissed employees data:", error);
+                    $('#dismissed-employees-content').html('<p class="text-danger">Error loading dismissed employees.</p>');
+                }
+            });
+        });
+</script>
+</body>
+</html>

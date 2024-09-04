@@ -29,21 +29,21 @@
     </thead>
     <tbody id="document-table-body"></tbody>
 </table>
-<h1 class="mt-5 mb-4">Увольнение</h1>
+<div class="container">
+    <h1 class="text-center mb-4">Оформление увольнения</h1>
 
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Employee Resignation Form</h1>
-
-    <form id="resignation-form">
+    <form id="dismiss-form">
         <div class="form-group">
             <label for="lastWorkingDay">Выберете последний рабочий день:</label>
+        </div>
+        <div>
             <input type="date" class="form-control" id="lastWorkingDay" name="lastWorkingDay" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit Resignation</button>
     </form>
 
     <div id="success-message" class="alert alert-success mt-3" style="display: none;">
-        Resignation request submitted successfully!
+       Заявка на увольнение оформлена
     </div>
     <div id="error-message" class="alert alert-danger mt-3" style="display: none;">
         An error occurred while submitting the request. Please try again.
