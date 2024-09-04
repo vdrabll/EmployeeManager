@@ -2,12 +2,14 @@ spring:
   application:
     name: EmployeeManager
 
+
   security:
     basic:
         enabled: false
   management:
     security:
         enabled: false
+
 
   jpa:
     hibernate:
@@ -27,3 +29,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/db
     username: ADMIN
     password: ADMIN
+
+server:
+  port: 8081

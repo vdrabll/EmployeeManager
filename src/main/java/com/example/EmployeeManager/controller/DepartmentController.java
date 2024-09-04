@@ -2,15 +2,19 @@ package com.example.EmployeeManager.controller;
 
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.service.DepartmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.EmployeeManager.enums.AuthRole.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +24,7 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @Operation(description = "Returns list for all departments", method = "GET")
-    @ApiResponse
+    @PreAuthorize("EMPLOYEE")
     @GetMapping()
     public List<Department> getAllDepartments() {
          return departmentService.getAll();

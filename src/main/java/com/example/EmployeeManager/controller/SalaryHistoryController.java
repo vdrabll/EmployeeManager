@@ -31,14 +31,6 @@ public class SalaryHistoryController {
         return salaryHistoryService.createSalaryHistory(salary);
     }
 
-    @Operation(description = "Delete salary history by giving id", method = "DELETE", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of salary history", required = true)
-    })
-    @DeleteMapping("/delete/{id}")
-    public void deleteSalaryHistoryById(@PathVariable Long id) {
-        salaryHistoryService.deleteSalaryHistoryById(id);
-    }
-
     @Operation(description = "Returns salary history by giving employee id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })
