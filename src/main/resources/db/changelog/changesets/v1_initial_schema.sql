@@ -4,7 +4,7 @@ create type salary_type as enum('SALARY', 'ADVANCE', 'BONUS', 'LEAVE', 'VOCATION
 create type location_type as enum('OFFICE', 'HOME');
 create type auth_roles as enum('CHIEF', 'EMPLOYEE');
 create type task_priority as enum('HIGH', 'LOW', 'MEDIUM');
-create type task_status as enum('BACKLOG','NOT_STARTED','IN_WORK','DONE');
+create type task_status as enum('BACKLOG','NOT_STARTED','IN_WORK','DONE','EXPIRED');
 
 create table if not exists roles(
     id  auth_roles primary key

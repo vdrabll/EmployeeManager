@@ -4,13 +4,8 @@ import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.repository.DepartmentRepository;
 import com.example.EmployeeManager.repository.EmployeeRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,9 +66,7 @@ public class DepartmentService {
     public void removeEmployeeFromDepartment(Long id, Long employee) {
         List<Employee> allEmployeesFromDepartment = getAllEmployeesFromDepartment(id);
         Employee employeeById = employeeRepository.getReferenceById(employee);
-        if (allEmployeesFromDepartment.contains(employeeById)) {
-            allEmployeesFromDepartment.remove(employeeById);
-        }
+        allEmployeesFromDepartment.remove(employeeById);
     }
 
 }
