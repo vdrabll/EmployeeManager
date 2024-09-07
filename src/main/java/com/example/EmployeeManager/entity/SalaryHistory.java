@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -23,7 +25,7 @@ public class SalaryHistory {
     private Employee employee;
 
     @Column(nullable = false)
-    private Date salaryDate;
+    private LocalDate salaryDate;
 
     @Column(nullable = false)
     private BigDecimal amount;

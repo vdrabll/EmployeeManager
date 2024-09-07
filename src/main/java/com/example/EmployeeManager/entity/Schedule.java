@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.sql.Time;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Setter
@@ -23,13 +25,13 @@ public class Schedule {
     private Employee employee;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(nullable = false)
-    private Time startTime;
+    private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private Time endTime;
+    private LocalDateTime endTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

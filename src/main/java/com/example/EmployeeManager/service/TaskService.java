@@ -6,10 +6,7 @@ import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.TaskRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.hateoas.server.core.LastInvocationAware;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +24,11 @@ public class TaskService {
     public Task getTaskById(Long id) {
         return taskRepository.findById(id).orElseThrow(()
                 -> new NoSuchElementException(String.format("Задача по данномому id: %s не найдена", id)));
+    }
+
+    @Transactional
+    public List<Task> getAllTasks() {
+        return taskRepository.findAll();
     }
 
     @Transactional
