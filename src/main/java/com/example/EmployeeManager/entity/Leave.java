@@ -5,7 +5,7 @@ import com.example.EmployeeManager.enums.LeaveType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -19,9 +19,9 @@ public class Leave {
     private Long id;
 
     @Column(nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
     @Column(nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")

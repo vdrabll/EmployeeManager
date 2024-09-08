@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 
@@ -26,21 +28,25 @@ class EmployeeRepositoryTest {
     private Employee employee;
     private Role roleEmployee;
     private Role roleChief;
+    private Pageable pageable;
 
 
 
     @BeforeEach
     void setUp() {
+        pageable = Pageable.unpaged();
         roleChief = roleRepository.save(new Role(AuthRole.CHIEF));
         roleEmployee = roleRepository.save(new Role(AuthRole.EMPLOYEE));
         chief = Employee.builder()
                 .role(roleChief)
+                .isWorkingNow(true)
                 .fullName( "Иванов Петр Петрович")
                 .email("example@sber.ru")
                 .build();
         employeeRepository.save(chief);
         employee = Employee.builder().
                 role(roleEmployee)
+                .isWorkingNow(true)
                 .fullName( "Иванов Иван Петрович")
                 .email("example@yandex.ru")
                 .build();
@@ -54,9 +60,8 @@ class EmployeeRepositoryTest {
 
     @Test
     void findEmployeeByIsWorkingNowEquals() {
-        List<Employee> employees = new ArrayList<Employee>();
-        employees.add(employee);
-        List<Employee> employeeByIsWorkingNowEquals = employeeRepository.findAllByIsWorkingNowEquals(false);
+        List<Employee> employees = List.of(chief, employee);
+        List<Employee> employeeByIsWorkingNowEquals = employeeRepository.findAllByIsWorkingNowEquals(true, pageable).stream().toList();
         assertThat(employeeByIsWorkingNowEquals).isNotEmpty();
         assertThat(employeeByIsWorkingNowEquals).isEqualTo(employees);
     }

@@ -4,10 +4,10 @@ import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Leave;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.LeaveRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.example.EmployeeManager.service.interfaces.LeaveService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class LeaveService {
+public class LeaveServiceImpl implements LeaveService {
     private final LeaveRepository leaveRepository;
     private final EmployeeRepository employeeRepository;
 
@@ -40,7 +40,7 @@ public class LeaveService {
    }
 
     @Transactional
-    public void RescheduleLeave(Long id, Leave leave) {
+    public void rescheduleLeave(Long id, Leave leave) {
         Leave leaveById = getLeaveById(id);
         leaveById.setType(leave.getType());
         leaveById.setStatus(leave.getStatus());
@@ -49,9 +49,9 @@ public class LeaveService {
     }
 
     @Transactional
-    public List<Leave> getAllByEmployee(Long employeeId) {
+    public Page<Leave> getAllByEmployee(Long employeeId, Pageable pageable) {
         Employee employeeById = employeeRepository.getReferenceById(employeeId);
-        return leaveRepository.findByEmployee(employeeById);
+        return leaveRepository.findByEmployee(employeeById, pageable);
 
     }
 }

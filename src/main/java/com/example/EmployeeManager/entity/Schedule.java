@@ -4,8 +4,6 @@ import com.example.EmployeeManager.enums.LocationType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Time;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -26,7 +24,6 @@ public class Schedule {
 
     @Column(nullable = false)
     private LocalDate date;
-
     @Column(nullable = false)
     private LocalDateTime startTime;
 

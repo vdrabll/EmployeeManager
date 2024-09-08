@@ -5,9 +5,13 @@ import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.entity.PositionHistory;
 import com.example.EmployeeManager.entity.SalaryHistory;
 import com.example.EmployeeManager.enums.SalaryType;
-import com.example.EmployeeManager.service.EmployeeService;
-import com.example.EmployeeManager.service.SalaryHistoryService;
+import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.repository.SalaryHistoryRepository;
+import com.example.EmployeeManager.service.EmployeeServiceImpl;
+import com.example.EmployeeManager.service.SalaryHistoryServiceImpl;
+import com.example.EmployeeManager.service.interfaces.SalaryHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +22,9 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class SalaryScheduledTask {
-    private final EmployeeService employeeService;
+    private final EmployeeRepository employeeRepositiry;
     private final SalaryHistoryService salaryHistoryService;
+    private final SalaryHistoryRepository salaryHistoryRepository;
 
     private final LocalDate salaryDate = LocalDate.now();
     private BigDecimal advancePercentage = new BigDecimal("0.3");
@@ -29,7 +34,8 @@ public class SalaryScheduledTask {
 
     @Scheduled(cron = "0 0 15 5 * * ")
     public void paymentAdvance() {
-        List<Employee> allWorkingEmployees = employeeService.getAllWorkingEmployees();
+
+        List<Employee> allWorkingEmployees = employeeRepositiry.findAll();
         allWorkingEmployees.forEach(employee ->
                 salaryHistoryService.createSalaryHistory(SalaryHistory.builder()
                         .employee(employee)
@@ -41,7 +47,7 @@ public class SalaryScheduledTask {
 
     @Scheduled(fixedRate = 5000)
     public void paymentSalary() {
-        List<Employee> allWorkingEmployees = employeeService.getAllWorkingEmployees();
+        List<Employee> allWorkingEmployees = employeeRepositiry.findAll();
         allWorkingEmployees.forEach(employee ->
                 salaryHistoryService.createSalaryHistory(SalaryHistory.builder()
                         .employee(employee)
@@ -53,7 +59,7 @@ public class SalaryScheduledTask {
 
     @Scheduled(cron = "0 0 15 25 * * ")
     public void paymentBonus() {
-        List<Employee> allWorkingEmployees = employeeService.getAllWorkingEmployees();
+        List<Employee> allWorkingEmployees = employeeRepositiry.findAll();
         allWorkingEmployees.forEach(employee ->
                 salaryHistoryService.createSalaryHistory(SalaryHistory.builder()
                         .employee(employee)

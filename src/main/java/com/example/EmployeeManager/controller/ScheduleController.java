@@ -2,25 +2,26 @@ package com.example.EmployeeManager.controller;
 
 
 import com.example.EmployeeManager.entity.Schedule;
-import com.example.EmployeeManager.service.ScheduleService;
+import com.example.EmployeeManager.service.ScheduleServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/schedules")
+@RequestMapping("/schedules")
 public class ScheduleController {
-    private final ScheduleService scheduleService;
+    private final ScheduleServiceImpl scheduleService;
 
     @Operation(description = "Returns Schedule by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of salary Schedule", required = true)
     })
-    @GetMapping("/schedule/{id}")
+    @GetMapping("/{id}")
     public Schedule getScheduleById(@PathVariable Long id) {
         return scheduleService.getScheduleById(id);
     }
@@ -34,7 +35,7 @@ public class ScheduleController {
     @Operation(description = "Delete schedule by giving id", method = "DELETE", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of schedule", required = true)
     })
-    @DeleteMapping("delete/schedule/{id}")
+    @DeleteMapping("/{id}")
     public void deleteScheduleById(@PathVariable Long id) {
         scheduleService.deleteScheduleById(id);
     }
@@ -42,7 +43,7 @@ public class ScheduleController {
     @Operation(description = "Update schedule by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of schedule", required = true)
     })
-    @PutMapping("update/schedule/{id}")
+    @PutMapping("/{id}")
     public Schedule updateSchedule(@PathVariable Long id, @RequestBody Schedule schedule) {
         return scheduleService.updateSchedule(id, schedule);
     }
@@ -50,8 +51,8 @@ public class ScheduleController {
     @Operation(description = "Return all schedule by employee", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })
-    @GetMapping("/employee/{id}")
-    public List<Schedule> getScheduleOfEmployee(@PathVariable Long id) {
-        return scheduleService.getScheduleOfEmployee(id);
+    @GetMapping("/employees/{id}")
+    public Page<Schedule> getScheduleOfEmployee(@PathVariable Long id, @ParameterObject Pageable pageable) {
+        return scheduleService.getScheduleOfEmployee(id, pageable);
     }
 }

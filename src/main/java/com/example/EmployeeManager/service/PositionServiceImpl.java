@@ -2,6 +2,7 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.repository.PositionRepository;
+import com.example.EmployeeManager.service.interfaces.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class PositionService {
+public class PositionServiceImpl implements PositionService {
     private final PositionRepository positionRepository;
 
     @Transactional
@@ -20,7 +21,7 @@ public class PositionService {
     }
 
     @Transactional
-    public Position createPositionHistory(Position position) {
+    public Position createPosition(Position position) {
         Position byNameAndSalary = positionRepository.findByNameAndSalary(position.getName(), position.getSalary())
                 .orElseThrow(() -> new NoSuchElementException("Запись о данной позиции уже существует") );
 
@@ -40,5 +41,4 @@ public class PositionService {
         positionById.setSalary(position.getSalary());
         return positionById;
     }
-
 }

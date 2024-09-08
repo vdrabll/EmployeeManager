@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
@@ -29,24 +32,26 @@ class LeaveRepositoryTest {
     private Leave vacationLeave;
     private Leave sickLeave;
     private Employee employee;
+    private Pageable pageable;
 
     @BeforeEach
     void setUp() {
+        pageable = Pageable.unpaged();
         employee = Employee.builder().fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
         vacationLeave = Leave.builder()
                 .status(LeaveStatus.AGREED)
                 .type(LeaveType.VACATION)
                 .employee(employee)
-                .startDate(new Date(2022, 2,1))
-                .endDate(new Date(2022, 2,15))
+                .startDate(LocalDate.of(2022, 2,1))
+                .endDate(LocalDate.of(2022, 2,1))
                 .build();
 
         sickLeave = Leave.builder()
                 .status(LeaveStatus.AGREED)
                 .type(LeaveType.SICK)
                 .employee(employee)
-                .startDate(new Date(2022, 4,1))
-                .endDate(new Date(2022, 5,15))
+                .startDate(LocalDate.of(2022, 7,1))
+                .endDate(LocalDate.of(2022, 7,15))
                 .build();
         leaveRepository.save(vacationLeave);
         leaveRepository.save(sickLeave);
@@ -60,7 +65,7 @@ class LeaveRepositoryTest {
     @Test
     void findByEmployeeTest() {
         List testLeaves = List.of(vacationLeave, sickLeave);
-        List<Leave> leaves = leaveRepository.findByEmployee(employee);
+        List<Leave> leaves = leaveRepository.findByEmployee(employee, pageable).toList();;
         assertNotNull(leaves);
         assertThat(leaves).isEqualTo(testLeaves);
     }
@@ -68,8 +73,8 @@ class LeaveRepositoryTest {
     @Test
     void findAllByEndDateBetweenTest() {
         List<Leave> testLeaves = new ArrayList<Leave>();
-        testLeaves.add(sickLeave);
-        List<Leave> leaves = leaveRepository.findAllByEndDateBetween(new Date(2022,1,1), new Date(2022,12,31));
+        testLeaves.add(vacationLeave);
+        List<Leave> leaves = leaveRepository.findAllByEndDateBetween(LocalDate.of(2022,1,1), LocalDate.of(2022,6,29), pageable).toList();
         assertNotNull(leaves);
         assertThat(leaves).isEqualTo(testLeaves);
     }

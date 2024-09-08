@@ -9,14 +9,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static java.util.Set.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest()
 @ActiveProfiles("test")
@@ -34,10 +36,11 @@ class TaskRepositoryTest {
     private Project project;
     private Task developerTask;
     private Task testerTask;
-
+    private Pageable pageable;
 
     @BeforeEach
     void setUp() {
+        pageable = Pageable.unpaged();
         employeeRole = roleRepository.save(new Role(AuthRole.EMPLOYEE));
         developer = Employee.builder()
                 .role(employeeRole)
@@ -88,8 +91,8 @@ class TaskRepositoryTest {
 
     @Test
     void findByNameAndEmployeeTest() {
-        Task taskOfDeveloper = taskRepository.findByNameAndEmployee("Разарботать схему базы данных", developer);
-        Task taskOfTester = taskRepository.findByNameAndEmployee("Разарботать интеграционные тесты",tester);
+        Optional<Task> taskOfDeveloper = taskRepository.findByNameAndEmployee("Разарботать схему базы данных", developer);
+        Optional<Task> taskOfTester = taskRepository.findByNameAndEmployee("Разарботать интеграционные тесты",tester);
         assertThat(taskOfDeveloper).isNotNull();
         assertThat(taskOfTester).isNotNull();
         assertThat(taskOfDeveloper).isEqualTo(developerTask);
@@ -98,13 +101,14 @@ class TaskRepositoryTest {
 
     @Test
     void findTasksByDeadlineAfter() {
-        List<Task> allByDeadlineAfter = taskRepository.findAllByDeadlineAfter(new Date(2024, 8, 26));
-        assertThat(allByDeadlineAfter).isEmpty();
+        Page<Task> allByDeadlineAfter = taskRepository.findAllByDeadlineAfter(LocalDate.of(2027, 8, 26), pageable);
+        assertThat(allByDeadlineAfter).isNotNull();
+        assertThat(allByDeadlineAfter).isEqualTo(List.of(developerTask, testerTask));
     }
 
     @Test
     void findTasksByType() {
-        List<Task> tasksOfDatabase = taskRepository.findAllByType("база данных");
+        Page<Task> tasksOfDatabase = taskRepository.findAllByType("база данных", pageable);
         assertThat(tasksOfDatabase).isNotNull();
         assertThat(tasksOfDatabase).isEqualTo(List.of(developerTask, testerTask));
     }
@@ -112,25 +116,25 @@ class TaskRepositoryTest {
     @Test
     void findTasksByPriority() {
         testerTask.setPriority(TaskPriority.MEDIUM);
-        List<Task> tasksOfDatabase = taskRepository.findAllByPriority(TaskPriority.HIGH);
+        Page<Task> tasksOfDatabase = taskRepository.findAllByPriority(TaskPriority.HIGH, pageable);
         assertThat(tasksOfDatabase).isNotNull();
         assertThat(tasksOfDatabase).isEqualTo(List.of(developerTask));
     }
 
     @Test
     void findAllByProject() {
-        List<Task> tasksOfProject = taskRepository.findAllByProject(project);
+        Page<Task> tasksOfProject = taskRepository.findAllByProject(project, pageable);
         assertThat(tasksOfProject).isNotNull();
         assertThat(tasksOfProject).isEqualTo(List.of(developerTask, testerTask));
     }
 
     @Test
     void findAllByEmployee() {
-        List<Task> tasksOfTester = taskRepository.findAllByEmployee(tester);
+        Page<Task> tasksOfTester = taskRepository.findAllByEmployee(tester, pageable);
         assertThat(tasksOfTester).isNotNull();
         assertThat(tasksOfTester).isEqualTo(List.of(testerTask));
 
-        List<Task> tasksOfDeveloper = taskRepository.findAllByEmployee(developer);
+        Page<Task> tasksOfDeveloper = taskRepository.findAllByEmployee(developer, pageable);
         assertThat(tasksOfDeveloper).isNotNull();
         assertThat(tasksOfDeveloper).isEqualTo(List.of(developerTask));
     }

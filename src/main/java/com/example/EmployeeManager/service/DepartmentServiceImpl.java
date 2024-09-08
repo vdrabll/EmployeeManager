@@ -4,8 +4,11 @@ import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.repository.DepartmentRepository;
 import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.service.interfaces.DepartmentService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +17,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class DepartmentService {
+public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeRepository employeeRepository;
 
@@ -25,8 +28,8 @@ public class DepartmentService {
     }
 
     @Transactional
-    public List<Department> getAll() {
-        return departmentRepository.findAll();
+    public Page<Department> getAll( Pageable pageable) {
+        return departmentRepository.findAll(pageable);
     }
 
     @Transactional
@@ -49,9 +52,10 @@ public class DepartmentService {
         departmentRepository.delete(department);
     }
 
+
     @Transactional
-    public List<Employee> getAllEmployeesFromDepartment(Long id) {
-        return getDepartmentById(id).getEmployees();
+    public Page<Employee> getAllEmployeesFromDepartment(Long id, Pageable pageable) {
+        return (Page<Employee>) getDepartmentById(id).getEmployees();
     }
 
     @Transactional
@@ -64,9 +68,9 @@ public class DepartmentService {
 
     @Transactional
     public void removeEmployeeFromDepartment(Long id, Long employee) {
-        List<Employee> allEmployeesFromDepartment = getAllEmployeesFromDepartment(id);
+        List<Employee> employees = getDepartmentById(id).getEmployees();
         Employee employeeById = employeeRepository.getReferenceById(employee);
-        allEmployeesFromDepartment.remove(employeeById);
+        employees.remove(employeeById);
     }
 
 }

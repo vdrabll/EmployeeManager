@@ -2,39 +2,39 @@ package com.example.EmployeeManager.controller;
 
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
-import com.example.EmployeeManager.enums.AuthRole;
-import com.example.EmployeeManager.service.DepartmentService;
+import com.example.EmployeeManager.service.DepartmentServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.EmployeeManager.enums.AuthRole.*;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/departments")
+@RequestMapping("/departments")
 public class DepartmentController {
 
-    private final DepartmentService departmentService;
+    private final DepartmentServiceImpl departmentService;
 
     @Operation(description = "Returns list for all departments", method = "GET")
-    @PreAuthorize("EMPLOYEE")
+    @PreAuthorize("hasRole(ROLE_CHEIF)")
     @GetMapping()
-    public List<Department> getAllDepartments() {
-         return departmentService.getAll();
+    public Page<Department> getAllDepartments(@ParameterObject Pageable pageable) {
+         return departmentService.getAll(pageable);
     }
 
     @Operation(description = "Returns department by giving identifier", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @ApiResponse
-    @GetMapping("/department/{id}")
+    @GetMapping("/{id}")
     public Department getDepartmentById(@PathVariable("id") Long id) {
         return departmentService.getDepartmentById(id);
     }
@@ -50,7 +50,7 @@ public class DepartmentController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @ApiResponse
-    @PutMapping("/department/update/{id}")
+    @PutMapping("/{id}")
     public Department updateDepartment(@PathVariable("id") Long id, @RequestBody Department department) {
         return departmentService.updateDepartmentById(id, department);
     }
@@ -59,7 +59,7 @@ public class DepartmentController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @ApiResponse
-    @DeleteMapping("/department/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteDepartment(@PathVariable Long id) {
         departmentService.delete(departmentService.getDepartmentById(id));
     }
@@ -69,15 +69,15 @@ public class DepartmentController {
     })
     @ApiResponse
     @GetMapping("/employees/{id}")
-    public List<Employee> getAllEmployeesFromDepartment(@PathVariable Long id) {
-        return departmentService.getAllEmployeesFromDepartment(id);
+    public Page<Employee> getAllEmployeesFromDepartment(@PathVariable Long id, @ParameterObject Pageable pageable) {
+        return departmentService.getAllEmployeesFromDepartment(id, pageable);
     }
 
     @Operation(description = "Add employee to given ", method = "POST", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @ApiResponse
-    @PostMapping("/employee/{id}")
+    @PostMapping("/employees/{id}")
     public void addEmployeeToDepartment(@PathVariable Long id, @RequestBody Employee newEmployee) {
         departmentService.addEmployeeToDepartment(id, newEmployee);
     }
@@ -87,7 +87,7 @@ public class DepartmentController {
             @Parameter(name = "employeeId", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })
     @ApiResponse
-    @DeleteMapping("department/{id}/employee/{employeeId}")
+    @DeleteMapping("/{id}/employees/{employeeId}")
     public void removeEmployeeFromDepartment(@PathVariable Long departmentId, @PathVariable Long employeeId) {
         departmentService.removeEmployeeFromDepartment(departmentId,employeeId);
     }

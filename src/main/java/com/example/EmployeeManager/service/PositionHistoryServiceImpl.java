@@ -2,6 +2,7 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.PositionHistory;
 import com.example.EmployeeManager.repository.PositionHistoryRepository;
+import com.example.EmployeeManager.service.interfaces.PositionHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class PositionHistoryService {
+public class PositionHistoryServiceImpl implements PositionHistoryService {
     private final PositionHistoryRepository positionHistoryRepository;
 
     @Transactional
@@ -33,4 +34,5 @@ public class PositionHistoryService {
     public void deletePositionHistoryById(Long id) {
         positionHistoryRepository.delete(getPositionById(id));
     }
+
 }

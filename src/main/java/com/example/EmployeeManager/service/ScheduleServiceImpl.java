@@ -1,23 +1,22 @@
 package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
-import com.example.EmployeeManager.entity.SalaryHistory;
 import com.example.EmployeeManager.entity.Schedule;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.ScheduleRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.example.EmployeeManager.service.interfaces.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleService {
+public class ScheduleServiceImpl implements ScheduleService {
+
     private final ScheduleRepository scheduleRepository;
     private final EmployeeRepository employeeRepository;
 
@@ -29,7 +28,7 @@ public class ScheduleService {
 
     @Transactional
     public  Schedule createSchedule(Schedule schedule) {
-        Schedule byEmployeeAndDate = scheduleRepository.findByEmployeeAndDate(
+        scheduleRepository.findByEmployeeAndDate(
                 schedule.getEmployee(),
                 schedule.getDate())
                 .orElseThrow(() -> new NoSuchElementException("Запись о депатраменте не найдена"));
@@ -52,8 +51,8 @@ public class ScheduleService {
     }
 
     @Transactional
-    public List<Schedule> getScheduleOfEmployee(Long employeeId) {
+    public Page<Schedule> getScheduleOfEmployee(Long employeeId, Pageable pageable) {
         Employee employeeById = employeeRepository.getReferenceById(employeeId);
-        return scheduleRepository.findAllByEmployee(employeeById);
+        return scheduleRepository.findAllByEmployee(employeeById, pageable);
     }
 }

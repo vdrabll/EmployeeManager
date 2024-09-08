@@ -4,18 +4,20 @@ import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Task;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.TaskRepository;
+import com.example.EmployeeManager.service.interfaces.TaskService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskService {
+public class TaskServiceImpl implements TaskService {
 
     private TaskRepository taskRepository;
     private EmployeeRepository employeeRepository;
@@ -27,8 +29,8 @@ public class TaskService {
     }
 
     @Transactional
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public Page<Task> getAllTasks(Pageable pageable) {
+        return taskRepository.findAll(pageable);
     }
 
     @Transactional
@@ -51,15 +53,15 @@ public class TaskService {
     public void deleteTask(Long id) {
         taskRepository.delete(getTaskById(id));
     }
-    @org.springframework.transaction.annotation.Transactional
-    public List<Task> getAllTasksOfEmployee(Long employeeId) {
+    @Transactional
+    public Page<Task> getAllTasksOfEmployee(Long employeeId, Pageable pageable) {
         Employee employeeById = employeeRepository.getReferenceById(employeeId);
-        return employeeById.getTasks();
+        return (Page<Task>) employeeById.getTasks();
     }
-    public List<Task> assignTaskToEmployee(Long id, Task task) {
+    public Page<Task> assignTaskToEmployee(Long id, Task task, Pageable pageable) {
         saveTask(task);
         Employee employeeById = employeeRepository.getReferenceById(id);
         employeeById.getTasks().add(task);
-        return employeeById.getTasks();
+        return (Page<Task>) employeeById.getTasks();
     }
 }

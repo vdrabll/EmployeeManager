@@ -2,21 +2,23 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @NoArgsConstructor
-public class EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
@@ -27,8 +29,8 @@ public class EmployeeService {
     }
 
     @Transactional
-    public List<Employee> getAllEmployee() {
-        return employeeRepository.findAll();
+    public Page<Employee> getAllEmployee(Pageable pageable) {
+        return employeeRepository.findAll(pageable);
     }
 
     @Transactional
@@ -54,12 +56,12 @@ public class EmployeeService {
     }
 
     @Transactional
-    public List<Employee> getAllWorkingEmployees() {
-        return employeeRepository.findAllByIsWorkingNowEquals(true);
+    public Page<Employee> getAllWorkingEmployees(Pageable pageable) {
+        return employeeRepository.findAllByIsWorkingNowEquals(true, pageable);
     }
 
     @Transactional
-    public List<Employee> getAllDismissedEmployees() {
-        return employeeRepository.findAllByIsWorkingNowEquals(false);
+    public Page<Employee> getAllDismissedEmployees(Pageable pageable) {
+        return employeeRepository.findAllByIsWorkingNowEquals(false, pageable);
     }
 }

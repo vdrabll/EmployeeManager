@@ -49,8 +49,8 @@ create table if not exists schedule(
          id                  bigserial primary key,
          employee_id         bigint references employee (id),
          date                date not null,
-         start_time          time not null,
-         end_time            time not null,
+         start_time          timestamp not null,
+         end_time            timestamp not null,
          location            location_type not null
 );
 

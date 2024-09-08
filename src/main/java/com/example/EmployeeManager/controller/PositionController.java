@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.controller;
 
 import com.example.EmployeeManager.entity.Position;
-import com.example.EmployeeManager.service.PositionService;
+import com.example.EmployeeManager.service.PositionServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/positions")
+@RequestMapping("/positions")
 public class PositionController {
-    private final PositionService positionService;
+    private final PositionServiceImpl positionService;
 
     @Operation(description = "Returns position by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
-    @GetMapping("/position/{id}")
+    @GetMapping("/{id}")
     public Position getPositionById(@PathVariable("id") Long id) {
         return positionService.getPositionById(id);
     }
@@ -27,13 +27,13 @@ public class PositionController {
     })
     @PostMapping
     public Position createPositionHistory(@RequestBody Position position) {
-        return positionService.createPositionHistory(position);
+        return positionService.createPosition(position);
     }
 
     @Operation(description = "Delete position by giving id", method = "DELETE", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of position", required = true)
     })
-    @DeleteMapping("/delete/position/{id}")
+    @DeleteMapping("/{id}")
     public void deletePositionById(@PathVariable Long id) {
         positionService.deletePositionById(id);
     }
@@ -41,7 +41,7 @@ public class PositionController {
     @Operation(description = "Update leave by giving id", method = "PUT", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
-    @PutMapping("/update/position/{id}")
+    @PutMapping("/{id}")
     public Position updatePosition(@PathVariable Long id, @RequestBody Position position) {
         return positionService.updatePosition(id, position);
     }
