@@ -2,12 +2,12 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Task;
-import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.TaskRepository;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.TaskService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,11 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
-    private TaskRepository taskRepository;
-    private EmployeeRepository employeeRepository;
+    private final TaskRepository taskRepository;
+    private final EmployeeService employeeService;
 
     @Transactional
     public Task getTaskById(Long id) {
@@ -35,10 +34,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     public Task saveTask(Task task) {
-        Task byNameAndEmployee = taskRepository.findByNameAndEmployee(task.getName(), task.getEmployee()).orElseThrow(()
-                        -> new NoSuchElementException("Запись уже найдена"));
-
-        return taskRepository.save(task);
+        if (taskRepository.findByNameAndEmployee(task.getName(), task.getEmployee()).isEmpty()) {
+            return taskRepository.save(task);
+        } else {
+            throw new RecordExistException(task.getName());
+        }
     }
 
     @Transactional
@@ -53,15 +53,18 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         taskRepository.delete(getTaskById(id));
     }
+    
     @Transactional
     public Page<Task> getAllTasksOfEmployee(Long employeeId, Pageable pageable) {
-        Employee employeeById = employeeRepository.getReferenceById(employeeId);
-        return (Page<Task>) employeeById.getTasks();
+        Employee employeeById = employeeService.getEmployeeById(employeeId);
+        return taskRepository.findAllByEmployee(employeeById, pageable);
     }
+    
+    @Transactional
     public Page<Task> assignTaskToEmployee(Long id, Task task, Pageable pageable) {
         saveTask(task);
-        Employee employeeById = employeeRepository.getReferenceById(id);
+        Employee employeeById = employeeService.getEmployeeById(id);
         employeeById.getTasks().add(task);
-        return (Page<Task>) employeeById.getTasks();
+        return taskRepository.findAllByEmployee(employeeById, pageable);
     }
 }

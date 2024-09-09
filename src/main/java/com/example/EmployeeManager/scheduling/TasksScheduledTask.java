@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class TasksScheduledTask {
     }
 
     private void checkIfNotExpired(Task task) {
-        if (task.getDeadline().after(new Date())) {
+        if (task.getDeadline().isAfter(LocalDate.now())) {
             task.setStatus(TaskStatus.EXPIRED);
         }
     }

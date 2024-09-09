@@ -22,15 +22,10 @@ public class Department {
     @Column(nullable = false)
     private String location;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "employees_departments",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "department_id"))
     private List<Employee> employees;
 
-    public Department(String name, String location, List<Employee> employees) {
-        this.name = name;
-        this.location = location;
-        this.employees = employees;
-    }
 }

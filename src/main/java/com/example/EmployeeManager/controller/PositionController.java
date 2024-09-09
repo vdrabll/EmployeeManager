@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class PositionController {
     private final PositionServiceImpl positionService;
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns position by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
@@ -22,14 +24,16 @@ public class PositionController {
         return positionService.getPositionById(id);
     }
 
-    @Operation(description = "Create new leave ", method = "POST", parameters = {
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
+    @Operation(description = "Create new position ", method = "POST", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of position", required = true)
     })
     @PostMapping
-    public Position createPositionHistory(@RequestBody Position position) {
+    public Position createPosition(@RequestBody Position position) {
         return positionService.createPosition(position);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Delete position by giving id", method = "DELETE", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of position", required = true)
     })
@@ -38,7 +42,8 @@ public class PositionController {
         positionService.deletePositionById(id);
     }
 
-    @Operation(description = "Update leave by giving id", method = "PUT", parameters = {
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
+    @Operation(description = "Update position by giving id", method = "PUT", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
     @PutMapping("/{id}")

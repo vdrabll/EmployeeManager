@@ -1,22 +1,23 @@
 package com.example.EmployeeManager.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/v1/login")
+@Controller
+@RequestMapping("/login")
 public class LoginController {
 
+    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
     @GetMapping("/employee")
     public String employeeLogin() {
-
-        return "";
+        return "employee-login";
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
     @GetMapping("/сhief")
     public String chiefLogin() {
-        return "";
+        return "chief-login";
     }
 }

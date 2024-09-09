@@ -1,6 +1,7 @@
 package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.PositionHistory;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.PositionHistoryRepository;
 import com.example.EmployeeManager.service.interfaces.PositionHistoryService;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,13 @@ public class PositionHistoryServiceImpl implements PositionHistoryService {
 
     @Transactional
     public PositionHistory createPositionHistory(PositionHistory positionHistory) {
-        PositionHistory position = positionHistoryRepository.findByEmployeeAndPositionAndStartDate(
-                positionHistory.getEmployee(),
-                positionHistory.getPosition(),
-                positionHistory.getStartDate()).orElseThrow(()
-                -> new NoSuchElementException("Данная запись уже сущесвует") );
-        return positionHistoryRepository.save(positionHistory);
+        if (positionHistoryRepository.findByEmployee_IdAndPosition_IdAndStartDate(positionHistory.getEmployee().getId(),
+                positionHistory.getPosition().getId(),
+                positionHistory.getStartDate()).isEmpty()) {
+            return positionHistoryRepository.save(positionHistory);
+        } else {
+            throw new RecordExistException(String.valueOf(positionHistory.getStartDate()));
+        }
     }
 
     @Transactional

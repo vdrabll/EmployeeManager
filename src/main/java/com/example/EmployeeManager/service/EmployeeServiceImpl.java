@@ -1,10 +1,10 @@
 package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
-import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,14 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
-    @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
 
     @Transactional
     public Employee getEmployeeById(Long id) {
@@ -35,9 +31,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Transactional
     public Employee addEmployee(Employee newEmployee) {
-       employeeRepository.findByEmail(newEmployee.getEmail()).orElseThrow(() ->
-               new NoSuchElementException("Такого сотрудника не существует"));
-       return employeeRepository.save(newEmployee);
+       if (employeeRepository.findByEmail(newEmployee.getEmail()).isEmpty()) {
+           return employeeRepository.save(newEmployee);
+       } else {
+           throw new RecordExistException(newEmployee.getEmail());
+       }
     }
 
    @Transactional
@@ -63,5 +61,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public Page<Employee> getAllDismissedEmployees(Pageable pageable) {
         return employeeRepository.findAllByIsWorkingNowEquals(false, pageable);
+    }
+
+    @Transactional
+    public Page<Employee> getAllEmployeesByDepartment(Long departmentId, Pageable pageable) {
+        return employeeRepository.findAllByDepartment_Id(departmentId, pageable);
     }
 }

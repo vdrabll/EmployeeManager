@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class LeaveController {
 
     private final LeaveServiceImpl leaveService;
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns leave by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
@@ -26,12 +28,14 @@ public class LeaveController {
         return leaveService.getLeaveById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Create new leave in database", method = "POST")
     @PostMapping()
     public Leave createLeave(@RequestBody Leave leave) {
         return leaveService.createLeave(leave);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Delete leave by giving id", method = "DELETE", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
@@ -40,6 +44,7 @@ public class LeaveController {
         leaveService.deleteLeaveById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Reschedule leave by giving id", method = "PUT", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
@@ -48,6 +53,7 @@ public class LeaveController {
         leaveService.rescheduleLeave(id, leave);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Return all leaves by giving employee id", method = "PUT", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })

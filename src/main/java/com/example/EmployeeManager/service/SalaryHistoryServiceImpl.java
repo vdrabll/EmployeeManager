@@ -2,8 +2,9 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.SalaryHistory;
-import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.SalaryHistoryRepository;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.SalaryHistoryService;
 import lombok.*;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class SalaryHistoryServiceImpl implements SalaryHistoryService {
     private final SalaryHistoryRepository salaryHistoryRepository;
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     @Transactional
     public SalaryHistory getSalaryHistoryById(Long id) {
@@ -27,11 +28,11 @@ public class SalaryHistoryServiceImpl implements SalaryHistoryService {
 
     @Transactional
     public  SalaryHistory createSalaryHistory(SalaryHistory salary) {
-        SalaryHistory salaryHistory = salaryHistoryRepository.findByEmployeeAndSalaryDateAndType(
-                salary.getEmployee(),
-                salary.getSalaryDate(),
-                salary.getType()).orElseThrow(() -> new NoSuchElementException("Выплата данного типа для сотрудника уже существует"));
-        return salaryHistoryRepository.save(salary);
+        if (salaryHistoryRepository.findByEmployeeAndSalaryDateAndType(salary.getEmployee(), salary.getSalaryDate(), salary.getType()).isEmpty()) {
+            return salaryHistoryRepository.save(salary);
+        } else {
+            throw new RecordExistException(String.valueOf(salary.getId()));
+        }
     }
 
     @Transactional
@@ -41,7 +42,7 @@ public class SalaryHistoryServiceImpl implements SalaryHistoryService {
 
     @Transactional
     public Page<SalaryHistory> getSalaryHistoryOfEmployee(Long employeeId, Pageable pageable) {
-        Employee employeeById = employeeRepository.getReferenceById(employeeId);
+        Employee employeeById = employeeService.getEmployeeById(employeeId);
         return salaryHistoryRepository.findAllByEmployee(employeeById, pageable);
     }
 }

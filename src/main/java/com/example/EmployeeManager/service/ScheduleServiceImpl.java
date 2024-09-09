@@ -2,8 +2,9 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Schedule;
-import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.ScheduleRepository;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ import java.util.NoSuchElementException;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     @Transactional
     public Schedule getScheduleById(Long id) {
@@ -28,11 +29,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public  Schedule createSchedule(Schedule schedule) {
-        scheduleRepository.findByEmployeeAndDate(
-                schedule.getEmployee(),
-                schedule.getDate())
-                .orElseThrow(() -> new NoSuchElementException("Запись о депатраменте не найдена"));
-        return scheduleRepository.save(schedule);
+        if (scheduleRepository.findByEmployeeAndDate(schedule.getEmployee(), schedule.getDate()).isEmpty()) {
+            return scheduleRepository.save(schedule);
+        } else {
+            throw new RecordExistException(String.valueOf(schedule.getId()));
+        }
     }
 
     @Transactional
@@ -52,7 +53,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public Page<Schedule> getScheduleOfEmployee(Long employeeId, Pageable pageable) {
-        Employee employeeById = employeeRepository.getReferenceById(employeeId);
+        Employee employeeById = employeeService.getEmployeeById(employeeId);
         return scheduleRepository.findAllByEmployee(employeeById, pageable);
     }
 }

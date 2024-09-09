@@ -2,8 +2,9 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Project;
-import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.ProjectRepository;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     @Transactional
     public Project getProjectById(Long id) {
@@ -25,9 +26,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     public  Project createProject(Project project) {
-        Project byNameAndDescription = projectRepository.findByName(project.getName()).orElseThrow(()
-                        -> new NoSuchElementException(String.format("Проект с названием %s уже существует", project.getName())));
-        return projectRepository.save(project);
+        if (projectRepository.findByName(project.getName()).isEmpty()) {
+            return projectRepository.save(project);
+        } else {
+            throw new RecordExistException(project.getName());
+        }
     }
 
     @Transactional
@@ -46,7 +49,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional // TODO: исправить
     public Project addEmployeeToProject(Long id, Long empId) {
         Project project = getProjectById(id);
-        Employee employee = employeeRepository.getReferenceById(empId);
+        Employee employee = employeeService.getEmployeeById(id);
         if (!project.getEmployees().contains(employee)) {
             project.getEmployees().add(employee);
         } else {
@@ -58,7 +61,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public Project removeEmployeeFromProject(Long id, Long empId) {
         Project project = getProjectById(id);
-        Employee employee = employeeRepository.getReferenceById(empId);
+        Employee employee = employeeService.getEmployeeById(id);
         if (project.getEmployees().contains(employee)) {
             project.getEmployees().remove(employee);
         } else {

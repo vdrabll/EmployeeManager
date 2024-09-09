@@ -2,11 +2,13 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
+import com.example.EmployeeManager.exceptions.NotFoundException;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.DepartmentRepository;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
+    private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
 
     @Transactional
@@ -27,6 +30,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 -> new NoSuchElementException(String.format("Департамент по данному id: %s не найден", id)));
     }
 
+
     @Transactional
     public Page<Department> getAll( Pageable pageable) {
         return departmentRepository.findAll(pageable);
@@ -34,9 +38,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Transactional
     public Department save(Department department) {
-        Department departmentByName = departmentRepository.findByName(department.getName()).orElseThrow(()
-                -> new NoSuchElementException("Департамент с таким именем уже найден")); // прочитать про runtime exeption
-        return departmentRepository.save(department);
+        if (!departmentRepository.findByName(department.getName()).isPresent()) {
+            return departmentRepository.save(department);
+        } else {
+            throw new RecordExistException(department.getName());
+        }
     }
 
     @Transactional
@@ -55,22 +61,33 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Transactional
     public Page<Employee> getAllEmployeesFromDepartment(Long id, Pageable pageable) {
-        return (Page<Employee>) getDepartmentById(id).getEmployees();
+        return employeeService.getAllEmployeesByDepartment(id, pageable);
     }
 
     @Transactional
-    public void addEmployeeToDepartment(Long id, Employee newEmployee) {
-        Department departmentById = getDepartmentById(id);
-        if (departmentById == null) {
-            departmentById.getEmployees().add(newEmployee);
+    public void addEmployeeToDepartment(Long id, Long newEmployeeId) {
+        Department department = getDepartmentById(id);
+
+        Employee employee = employeeService.getEmployeeById(newEmployeeId);
+
+        if (employee.getDepartment().stream().noneMatch(department1 -> department1.getId().equals(department.getId()))) {
+            department.getEmployees().add(employee);
+            departmentRepository.save(department);
+
+            employee.getDepartment().add(department);
+            employeeRepository.save(employee);
+
         }
     }
 
     @Transactional
-    public void removeEmployeeFromDepartment(Long id, Long employee) {
-        List<Employee> employees = getDepartmentById(id).getEmployees();
-        Employee employeeById = employeeRepository.getReferenceById(employee);
-        employees.remove(employeeById);
-    }
+    public void removeEmployeeFromDepartment(Long id, Long employeeId) {
+        Department department = getDepartmentById(id);
 
+        Employee employee = employeeService.getEmployeeById(employeeId);
+
+        if (employee.getDepartment().stream().noneMatch(department1 -> department1.getId().equals(department.getId()))) {
+            employee.getDepartment().remove(department);
+        }
+    }
 }

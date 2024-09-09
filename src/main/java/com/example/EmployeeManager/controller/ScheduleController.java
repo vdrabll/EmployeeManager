@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
     private final ScheduleServiceImpl scheduleService;
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns Schedule by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of salary Schedule", required = true)
     })
@@ -26,12 +28,7 @@ public class ScheduleController {
         return scheduleService.getScheduleById(id);
     }
 
-    @Operation(description = "Create Schedule", method = "POST")
-    @PostMapping
-    public Schedule createSchedule(@RequestBody Schedule schedule) {
-        return scheduleService.createSchedule(schedule);
-    }
-
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Delete schedule by giving id", method = "DELETE", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of schedule", required = true)
     })
@@ -40,6 +37,7 @@ public class ScheduleController {
         scheduleService.deleteScheduleById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Update schedule by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of schedule", required = true)
     })
@@ -48,6 +46,7 @@ public class ScheduleController {
         return scheduleService.updateSchedule(id, schedule);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Return all schedule by employee", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })

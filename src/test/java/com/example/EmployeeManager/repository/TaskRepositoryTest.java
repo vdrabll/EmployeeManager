@@ -1,24 +1,26 @@
 package com.example.EmployeeManager.repository;
 
-import com.example.EmployeeManager.entity.*;
+import com.example.EmployeeManager.entity.Employee;
+import com.example.EmployeeManager.entity.Project;
+import com.example.EmployeeManager.entity.Role;
+import com.example.EmployeeManager.entity.Task;
 import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.enums.TaskPriority;
 import com.example.EmployeeManager.enums.TaskStatus;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest()
 @ActiveProfiles("test")
@@ -62,7 +64,7 @@ class TaskRepositoryTest {
                 .priority(TaskPriority.HIGH)
                 .employee(developer)
                 .project(project)
-                .deadline(new Date(2024, 6, 20))
+                .deadline(LocalDate.of(2024, 6, 20))
                 .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)
@@ -74,7 +76,7 @@ class TaskRepositoryTest {
                 .priority(TaskPriority.HIGH)
                 .employee(tester)
                 .project(project)
-                .deadline(new Date(2024, 7, 5))
+                .deadline(LocalDate.of(2024, 7, 5))
                 .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)

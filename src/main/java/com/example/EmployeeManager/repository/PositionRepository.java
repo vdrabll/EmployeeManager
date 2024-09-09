@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {
-    // BigDecimal getAnnualSalary(Employee employee); // TODO: написать метод и тест
     Optional<Position> findByNameAndSalary(String name, BigDecimal salary);
 }

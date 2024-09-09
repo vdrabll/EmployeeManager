@@ -19,4 +19,6 @@ public interface EmployeeService {
     Page<Employee> getAllWorkingEmployees(Pageable pageable);
 
     Page<Employee> getAllDismissedEmployees(Pageable pageable);
+
+    Page<Employee> getAllEmployeesByDepartment(Long departmentId, Pageable pageable);
 }

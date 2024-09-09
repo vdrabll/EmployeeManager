@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class TaskController {
 
     private final TaskServiceImpl taskService;
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns task by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)
     })
@@ -26,11 +28,13 @@ public class TaskController {
         return taskService.getTaskById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Create task", method = "POST")
     @PostMapping public Task saveTask(@RequestBody Task task) {
         return taskService.saveTask(task);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Update task by giving id", method = "PUT", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)
     })
@@ -39,6 +43,7 @@ public class TaskController {
         return taskService.updateTask(id, task);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Delete task by giving id", method = "DELETE", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)
     })
@@ -47,6 +52,7 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns all tasks of employee by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })
@@ -55,6 +61,7 @@ public class TaskController {
         return taskService.getAllTasksOfEmployee(id, pageable);
     }
 
+    @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Assign task to employee by giving id", method = "POST", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true),
             @Parameter(name = "task", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)

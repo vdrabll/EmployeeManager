@@ -1,20 +1,19 @@
 package com.example.EmployeeManager.repository;
 
-import com.example.EmployeeManager.entity.*;
+import com.example.EmployeeManager.entity.Employee;
+import com.example.EmployeeManager.entity.Role;
 import com.example.EmployeeManager.enums.AuthRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest()
 @ActiveProfiles("test")

@@ -5,7 +5,7 @@ import com.example.EmployeeManager.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -32,7 +32,7 @@ public class Task {
     private Employee employee;
 
     @Column(nullable = false)
-    private Date deadline;
+    private LocalDate deadline;
 
     private Short estimate;
 

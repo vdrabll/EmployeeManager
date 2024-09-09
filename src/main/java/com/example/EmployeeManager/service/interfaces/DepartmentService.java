@@ -20,7 +20,7 @@ public interface DepartmentService {
 
     Page<Employee> getAllEmployeesFromDepartment(Long id, Pageable pageable);
 
-    void addEmployeeToDepartment(Long id, Employee newEmployee);
+    void addEmployeeToDepartment(Long id, Long newEmployeeId);
 
     void removeEmployeeFromDepartment(Long id, Long employeeId);
 }

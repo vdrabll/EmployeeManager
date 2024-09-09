@@ -7,11 +7,8 @@ import com.example.EmployeeManager.entity.SalaryHistory;
 import com.example.EmployeeManager.enums.SalaryType;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.SalaryHistoryRepository;
-import com.example.EmployeeManager.service.EmployeeServiceImpl;
-import com.example.EmployeeManager.service.SalaryHistoryServiceImpl;
 import com.example.EmployeeManager.service.interfaces.SalaryHistoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +24,8 @@ public class SalaryScheduledTask {
     private final SalaryHistoryRepository salaryHistoryRepository;
 
     private final LocalDate salaryDate = LocalDate.now();
-    private BigDecimal advancePercentage = new BigDecimal("0.3");
-    private BigDecimal bonusPercentage = new BigDecimal("0.45");
+    private final BigDecimal advancePercentage = new BigDecimal("0.3");
+    private final BigDecimal bonusPercentage = new BigDecimal("0.45");
 
 
 
