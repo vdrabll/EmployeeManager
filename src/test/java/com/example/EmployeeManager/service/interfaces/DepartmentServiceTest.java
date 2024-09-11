@@ -2,22 +2,21 @@ package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
-import com.example.EmployeeManager.entity.Role;
-import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.repository.DepartmentRepository;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.example.EmployeeManager.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -100,9 +99,12 @@ class DepartmentServiceTest {
                 .employees(Collections.emptyList())
                 .build());
 
-        Department departmentById = departmentService.getDepartmentById(3L);
+        Department departmentById = departmentService.getDepartmentById(newDepartment.getId());
         assertNotNull(departmentById);
         assertEquals(newDepartment.getName(), departmentById.getName());
+        assertEquals(newDepartment.getId(), departmentById.getId());
+        assertEquals(departmentService.getAll(Pageable.unpaged()).getSize(), 3);
+        departmentService.getAll(Pageable.unpaged()).forEach(department -> System.out.println(department.getName()));
     }
 
     @Test
@@ -128,30 +130,45 @@ class DepartmentServiceTest {
 
     @Test
     void getAllEmployeesFromDepartment() {
-        Page<Employee> allEmployeesFromDepartment = departmentService.getAllEmployeesFromDepartment(1L, Pageable.unpaged());
-        assertEquals(allEmployeesFromDepartment.stream().toList().size(), 1);
+        Page<Employee> allEmployeesFromDepartment = departmentService.getAllEmployeesFromDepartment(moskowDepartment.getId(), Pageable.unpaged());
+        assertEquals(allEmployeesFromDepartment.stream().toList().size(), 0);
 
-        Page<Employee> allEmployees = departmentService.getAllEmployeesFromDepartment(2L, Pageable.unpaged());
+        Page<Employee> allEmployees = departmentService.getAllEmployeesFromDepartment(penzaDepartment.getId(), Pageable.unpaged());
         assertNotNull(allEmployees);
-        assertTrue(allEmployees.stream().toList().size() == 1);
+        assertEquals(allEmployees.stream().toList().size(), 2);
 
     }
 
     @Test
     void addEmployeeToDepartment() {
-        Employee newEmployee = employeeRepository.save(Employee.builder()
-                .fullName("Алексеев Акакий Тавридиев")
-                .isWorkingNow(true)
+        Department testDepartment = departmentRepository.save(Department.builder()
+                .name("завод")
+                .location("пенза")
+                .build());
+        Employee testEmployee = employeeRepository.save(Employee.builder()
+                .fullName("olegsey")
                 .email("exam@sber.ru")
                 .build());
-        departmentService.addEmployeeToDepartment(penzaDepartment.getId(),newEmployee.getId());
-        departmentService.getDepartmentById(penzaDepartment.getId()).getEmployees().forEach(employee1 -> System.out.println(employee1.getFullName()));
 
-        assertEquals(penzaDepartment.getEmployees().size(), 2);
+        Department department = departmentService.getDepartmentById(penzaDepartment.getId());
+        departmentService.addEmployeeToDepartment(department.getId(), testEmployee.getId());
+        assertNotNull(department);
+        assertNotNull(testEmployee.getId());
+        assertNotNull(penzaDepartment.getId());
+        assertNotNull(department.getId());
+        assertEquals(penzaDepartment.getName(), department.getName());
+        assertEquals(penzaDepartment.getLocation(), department.getLocation());
+        assertEquals(department.getEmployees().size(), 2);
+        departmentService.addEmployeeToDepartment(penzaDepartment.getId(),testEmployee.getId());
+        departmentService.getDepartmentById(penzaDepartment.getId()).getEmployees().forEach(employee1 -> System.out.println(employee1.getFullName()));
+        assertEquals(departmentService.getDepartmentById(penzaDepartment.getId()).getEmployees().size(), 3);
     }
 
     @Test
     void removeEmployeeFromDepartment() {
+        departmentService.removeEmployeeFromDepartment( penzaDepartment.getId(), employee.getId());
+        departmentService.getAllEmployeesFromDepartment(penzaDepartment.getId(), Pageable.unpaged()).forEach(employee1 -> System.out.println(employee1.getFullName()));
+        assertTrue(departmentService.getDepartmentById(penzaDepartment.getId()).getEmployees().size() == 1);
 
     }
 }

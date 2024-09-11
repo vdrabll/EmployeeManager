@@ -19,7 +19,7 @@ public class Employee {
     @Column(columnDefinition = "boolean default true")
     private Boolean isWorkingNow;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 250)
     private String fullName;
 
     @Column(nullable = false)
@@ -28,29 +28,23 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Schedule> schedule;
 
-    @ManyToMany
-    @JoinTable(name = "employees_departments",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "department_id"))
+    @ManyToMany(mappedBy = "employees" , cascade = CascadeType.ALL)
     private List<Department> department;
 
     @OneToMany(mappedBy = "employee")
     private List<PositionHistory> positionHistoryList;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne( cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<SalaryHistory> salaryHistories;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @ManyToMany
-    @JoinTable(name = "employees_projects",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ManyToMany(mappedBy = "employees" , cascade = CascadeType.ALL)
     private List<Project> projects;
 
 }

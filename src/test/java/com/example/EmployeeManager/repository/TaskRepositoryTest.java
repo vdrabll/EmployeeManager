@@ -46,15 +46,15 @@ class TaskRepositoryTest {
         employeeRole = roleRepository.save(new Role(AuthRole.EMPLOYEE));
         developer = Employee.builder()
                 .role(employeeRole)
-                .fullName( "Иванов Петр Петрович")
+                .fullName("Иванко Петр Петрович")
                 .email("example@sber.ru")
                 .build();
         tester = Employee.builder()
                 .role(employeeRole)
-                .fullName( "Иванов Иван Петрович")
+                .fullName("Шобл Анатолий Петрович")
                 .email("example@yandex.ru")
                 .build();
-        project =  Project.builder()
+        project = Project.builder()
                 .name("Разработка Высоконагруженной системы")
                 .description("Создание системы")
                 .build();

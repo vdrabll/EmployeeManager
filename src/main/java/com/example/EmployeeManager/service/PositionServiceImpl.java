@@ -1,6 +1,7 @@
 package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Position;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.PositionRepository;
 import com.example.EmployeeManager.service.interfaces.PositionService;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,11 @@ public class PositionServiceImpl implements PositionService {
 
     @Transactional
     public Position createPosition(Position position) {
-        Position byNameAndSalary = positionRepository.findByNameAndSalary(position.getName(), position.getSalary())
-                .orElseThrow(() -> new NoSuchElementException("Запись о данной позиции уже существует") );
-
-        return positionRepository.save(position);
+       if (positionRepository.findByNameAndSalary(position.getName(), position.getSalary()).isEmpty()) {
+           return positionRepository.save(position);
+       } else {
+           throw new RecordExistException(position.getName());
+       }
     }
 
     @Transactional
@@ -36,9 +38,9 @@ public class PositionServiceImpl implements PositionService {
     @Transactional
     public Position updatePosition(Long id, Position position) {
         Position positionById = getPositionById(id);
-        positionById.setName(position.getName());
-        positionById.setGrade(position.getGrade());
-        positionById.setSalary(position.getSalary());
-        return positionById;
+            positionById.setName(position.getName());
+            positionById.setGrade(position.getGrade());
+            positionById.setSalary(position.getSalary());
+            return positionById;
     }
 }

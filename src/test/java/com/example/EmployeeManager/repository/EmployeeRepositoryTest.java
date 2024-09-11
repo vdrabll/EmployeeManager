@@ -29,8 +29,6 @@ class EmployeeRepositoryTest {
     private Role roleChief;
     private Pageable pageable;
 
-
-
     @BeforeEach
     void setUp() {
         pageable = Pageable.unpaged();
@@ -39,14 +37,14 @@ class EmployeeRepositoryTest {
         chief = Employee.builder()
                 .role(roleChief)
                 .isWorkingNow(true)
-                .fullName( "Иванов Петр Петрович")
+                .fullName( "Иванов Алексей Петрович")
                 .email("example@sber.ru")
                 .build();
         employeeRepository.save(chief);
         employee = Employee.builder().
                 role(roleEmployee)
                 .isWorkingNow(true)
-                .fullName( "Иванов Иван Петрович")
+                .fullName( "Аров Иван Иванович")
                 .email("example@yandex.ru")
                 .build();
         employeeRepository.save(employee);

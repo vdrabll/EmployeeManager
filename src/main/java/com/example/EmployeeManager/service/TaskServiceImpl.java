@@ -46,6 +46,9 @@ public class TaskServiceImpl implements TaskService {
         Task taskById = getTaskById(id);
         taskById.setName(task.getName());
         taskById.setDescription(task.getDescription());
+        taskById.setDeadline(task.getDeadline());
+        taskById.setType(task.getType());
+        taskById.setStatus(task.getStatus());
         return taskById;
     }
 
@@ -61,10 +64,11 @@ public class TaskServiceImpl implements TaskService {
     }
     
     @Transactional
-    public Page<Task> assignTaskToEmployee(Long id, Task task, Pageable pageable) {
-        saveTask(task);
+    public Task assignTaskToEmployee(Long id, Task task, Pageable pageable) {
         Employee employeeById = employeeService.getEmployeeById(id);
-        employeeById.getTasks().add(task);
-        return taskRepository.findAllByEmployee(employeeById, pageable);
+        Task taskById = taskRepository.findById(task.getId()).get();
+        employeeById.getTasks().add(taskById);
+        taskById.setEmployee(employeeById);
+        return task;
     }
 }

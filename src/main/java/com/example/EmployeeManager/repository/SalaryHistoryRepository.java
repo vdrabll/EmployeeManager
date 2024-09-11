@@ -3,7 +3,6 @@ package com.example.EmployeeManager.repository;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.SalaryHistory;
 import com.example.EmployeeManager.enums.SalaryType;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface SalaryHistoryRepository extends JpaRepository<SalaryHistory, Long> {
-    Page<SalaryHistory> findAllByEmployee(Employee employee, @ParameterObject Pageable pageable);
+    Page<SalaryHistory> findAllByEmployee_Id( Long employee, Pageable pageable);
     Optional<SalaryHistory> findByEmployeeAndSalaryDateAndType(Employee employee, LocalDate date, SalaryType type);
 }

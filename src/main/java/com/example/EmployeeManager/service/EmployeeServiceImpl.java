@@ -41,8 +41,9 @@ public class EmployeeServiceImpl implements EmployeeService {
    @Transactional
     public Employee updateEmployee(Long id, Employee employee) {
         Employee employeeById = getEmployeeById(id);
-        employeeById.setFullName(employeeById.getFullName());
-        employeeById.setEmail(employeeById.getEmail());
+        employeeById.setIsWorkingNow(employee.getIsWorkingNow());
+        employeeById.setFullName(employee.getFullName());
+        employeeById.setEmail(employee.getEmail());
         return  employeeById;
     }
 

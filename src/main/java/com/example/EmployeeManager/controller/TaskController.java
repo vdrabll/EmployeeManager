@@ -67,7 +67,7 @@ public class TaskController {
             @Parameter(name = "task", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)
     })
     @PostMapping("/employees/{id}")
-    public Page<Task> assignTaskToEmployee(@PathVariable Long id, @RequestBody Task task, @ParameterObject Pageable pageable) {
+    public Task assignTaskToEmployee(@PathVariable Long id, @RequestBody Task task, @ParameterObject Pageable pageable) {
         return taskService.assignTaskToEmployee(id, task, pageable);
     }
 }

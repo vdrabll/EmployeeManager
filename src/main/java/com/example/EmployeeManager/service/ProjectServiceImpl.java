@@ -49,9 +49,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional // TODO: исправить
     public Project addEmployeeToProject(Long id, Long empId) {
         Project project = getProjectById(id);
-        Employee employee = employeeService.getEmployeeById(id);
-        if (!project.getEmployees().contains(employee)) {
+        Employee employee = employeeService.getEmployeeById(empId);
+        if (project.getEmployees().stream().noneMatch(emp -> emp.getId().equals(empId))) {
             project.getEmployees().add(employee);
+            employee.getProjects().add(project);
         } else {
             throw new RuntimeException(String.format("Сотрудник по данному id: %s уже найден в списке участников проекта", id));
         }
@@ -61,8 +62,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public Project removeEmployeeFromProject(Long id, Long empId) {
         Project project = getProjectById(id);
-        Employee employee = employeeService.getEmployeeById(id);
-        if (project.getEmployees().contains(employee)) {
+        Employee employee = employeeService.getEmployeeById(empId);
+        if (project.getEmployees().stream().anyMatch(emp -> emp.getId().equals(empId))) {
+            employee.getDepartment().remove(project);
             project.getEmployees().remove(employee);
         } else {
            throw new RuntimeException(String.format("Сотрудник по данному id: %s не найден в списке участников проекта", id));

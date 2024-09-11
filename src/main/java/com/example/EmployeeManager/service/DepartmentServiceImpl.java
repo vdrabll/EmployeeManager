@@ -2,7 +2,6 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
-import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.DepartmentRepository;
 import com.example.EmployeeManager.repository.EmployeeRepository;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -72,11 +70,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         if (employee.getDepartment().stream().noneMatch(department1 -> department1.getId().equals(department.getId()))) {
             department.getEmployees().add(employee);
-            departmentRepository.save(department);
-
             employee.getDepartment().add(department);
-            employeeRepository.save(employee);
-
         }
     }
 
@@ -86,8 +80,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         Employee employee = employeeService.getEmployeeById(employeeId);
 
-        if (employee.getDepartment().stream().noneMatch(department1 -> department1.getId().equals(department.getId()))) {
+        if (!employee.getDepartment().stream().noneMatch(department1 -> department1.getId().equals(department.getId()))) {
             employee.getDepartment().remove(department);
+            department.getEmployees().remove(employee);
         }
     }
 }

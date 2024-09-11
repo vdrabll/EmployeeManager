@@ -23,7 +23,7 @@ public class Leave {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 

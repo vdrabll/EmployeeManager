@@ -5,6 +5,8 @@ import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.PositionHistoryRepository;
 import com.example.EmployeeManager.service.interfaces.PositionHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,11 @@ public class PositionHistoryServiceImpl implements PositionHistoryService {
     @Transactional
     public void deletePositionHistoryById(Long id) {
         positionHistoryRepository.delete(getPositionById(id));
+    }
+
+    @Transactional
+    public Page<PositionHistory> getAllByEmployeeId(Long employeeId, Pageable pageable) {
+        return positionHistoryRepository.findByEmployee_Id(employeeId, pageable);
     }
 
 }

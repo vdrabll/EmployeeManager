@@ -55,7 +55,7 @@ class SalaryHistoryRepositoryTest {
     @Test
     void findAllByEmployee() {
         List testSalary = List.of(bonus, salary);
-        List<SalaryHistory> salaryHistories = salaryHistoryRepository.findAllByEmployee(employee, pageable).toList();
+        List<SalaryHistory> salaryHistories = salaryHistoryRepository.findAllByEmployee_Id(employee.getId(), pageable).toList();
         assertNotNull(salaryHistories);
         assertThat(salaryHistories).isEqualTo(testSalary);
     }

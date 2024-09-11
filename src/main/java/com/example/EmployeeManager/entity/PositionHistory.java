@@ -3,7 +3,7 @@ package com.example.EmployeeManager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -21,9 +21,9 @@ public class PositionHistory {
     private Employee employee;
 
     @Column(nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
-    private Date endDate;
+    private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name = "position_id")

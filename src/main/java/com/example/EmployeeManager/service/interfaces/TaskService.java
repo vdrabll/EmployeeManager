@@ -8,8 +8,6 @@ public interface TaskService {
 
     Task getTaskById(Long id);
 
-    Page<Task> getAllTasks(Pageable pageable);
-
     Task saveTask(Task task);
 
     Task updateTask(Long id, Task task);
@@ -18,5 +16,5 @@ public interface TaskService {
 
     Page<Task> getAllTasksOfEmployee(Long employeeId, Pageable pageable);
 
-    Page<Task> assignTaskToEmployee(Long employeeId, Task task, Pageable pageable);
+    Task assignTaskToEmployee(Long employeeId, Task task, Pageable pageable);
 }

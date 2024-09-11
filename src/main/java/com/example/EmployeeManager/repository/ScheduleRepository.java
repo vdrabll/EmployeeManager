@@ -1,8 +1,6 @@
 package com.example.EmployeeManager.repository;
 
-import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Schedule;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    Page<Schedule> findAllByEmployee(Employee employee, @ParameterObject Pageable pageable);
-    Optional<Schedule> findByEmployeeAndDate(Employee employee, LocalDate date);
+    Page<Schedule> findAllByEmployee_Id(Long employee, Pageable pageable);
+    Optional<Schedule> findByEmployee_IdAndDate(Long employee, LocalDate date);
 }

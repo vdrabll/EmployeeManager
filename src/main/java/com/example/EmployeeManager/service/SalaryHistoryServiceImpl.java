@@ -1,12 +1,10 @@
 package com.example.EmployeeManager.service;
 
-import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.SalaryHistory;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.SalaryHistoryRepository;
-import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.SalaryHistoryService;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class SalaryHistoryServiceImpl implements SalaryHistoryService {
     private final SalaryHistoryRepository salaryHistoryRepository;
-    private final EmployeeService employeeService;
 
     @Transactional
     public SalaryHistory getSalaryHistoryById(Long id) {
@@ -36,13 +33,7 @@ public class SalaryHistoryServiceImpl implements SalaryHistoryService {
     }
 
     @Transactional
-    public void deleteSalaryHistoryById(Long id) {
-        salaryHistoryRepository.delete(getSalaryHistoryById(id));
-    }
-
-    @Transactional
     public Page<SalaryHistory> getSalaryHistoryOfEmployee(Long employeeId, Pageable pageable) {
-        Employee employeeById = employeeService.getEmployeeById(employeeId);
-        return salaryHistoryRepository.findAllByEmployee(employeeById, pageable);
+        return salaryHistoryRepository.findAllByEmployee_Id(employeeId, pageable);
     }
 }
