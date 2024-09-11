@@ -6,9 +6,7 @@ import com.example.EmployeeManager.entity.Role;
 import com.example.EmployeeManager.enums.AuthRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,9 +31,18 @@ class DepartmentRepositoryTest {
     public  void setUp() {
         roleChief = roleRepository.save(new Role(AuthRole.CHIEF));
         roleEmployee = roleRepository.save(new Role(AuthRole.EMPLOYEE));
-        chief = Employee.builder().role(roleEmployee).fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
-        employee = Employee.builder().role(roleChief).fullName( "Иванов Иван Петрович").email("example@yandex.ru").build();
-        firtsDepartment = new Department("ТехСбер", "Байдукова 172", new LinkedList<Employee>() );
+        chief = Employee.builder()
+                .role(roleEmployee)
+                .fullName( "Иванов Петр Петрович")
+                .email("example@sber.ru")
+                .build();
+        employee = Employee.builder()
+                .role(roleChief)
+                .fullName( "Иванов Иван Петрович")
+                .email("example@yandex.ru")
+                .build();
+        firtsDepartment = Department.builder().name("ТехСбер").location("Байдукова 172").employees(new LinkedList<Employee>()).build();
+
         firtsDepartment.getEmployees().add(chief);
         firtsDepartment.getEmployees().add(employee);
         departmentRepository.save(firtsDepartment);
@@ -46,10 +53,8 @@ class DepartmentRepositoryTest {
         departmentRepository.deleteAll();
     }
 
-//    @Test
-//    public void getDepartmentChiefTest() {
-//        Employee departmentChief = departmentRepository.getDepartmentChief(firtsDepartment.getId());
-//        assertThat(departmentChief).isNotNull();
-//        assertThat(departmentChief.getFullName().equals(chief.getFullName()));
-//    }
+    @Test
+    public void saveTest() {
+        departmentRepository.getReferenceById(1L).getEmployees();
+    }
 }

@@ -17,5 +17,4 @@ public class Role {
     @Id
     @Enumerated(EnumType.STRING)
     private AuthRole id;
-
 }

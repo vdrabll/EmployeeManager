@@ -1,8 +1,12 @@
 package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.PositionHistory;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.PositionHistoryRepository;
+import com.example.EmployeeManager.service.interfaces.PositionHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +14,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class PositionHistoryService {
+public class PositionHistoryServiceImpl implements PositionHistoryService {
     private final PositionHistoryRepository positionHistoryRepository;
 
     @Transactional
@@ -21,16 +25,23 @@ public class PositionHistoryService {
 
     @Transactional
     public PositionHistory createPositionHistory(PositionHistory positionHistory) {
-        PositionHistory position = positionHistoryRepository.findByEmployeeAndPositionAndStartDate(
-                positionHistory.getEmployee(),
-                positionHistory.getPosition(),
-                positionHistory.getStartDate()).orElseThrow(()
-                -> new NoSuchElementException("Данная запись уже сущесвует") );
-        return positionHistoryRepository.save(positionHistory);
+        if (positionHistoryRepository.findByEmployee_IdAndPosition_IdAndStartDate(positionHistory.getEmployee().getId(),
+                positionHistory.getPosition().getId(),
+                positionHistory.getStartDate()).isEmpty()) {
+            return positionHistoryRepository.save(positionHistory);
+        } else {
+            throw new RecordExistException(String.valueOf(positionHistory.getStartDate()));
+        }
     }
 
     @Transactional
     public void deletePositionHistoryById(Long id) {
         positionHistoryRepository.delete(getPositionById(id));
     }
+
+    @Transactional
+    public Page<PositionHistory> getAllByEmployeeId(Long employeeId, Pageable pageable) {
+        return positionHistoryRepository.findByEmployee_Id(employeeId, pageable);
+    }
+
 }

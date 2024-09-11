@@ -4,8 +4,6 @@ import com.example.EmployeeManager.enums.LocationType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Time;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -20,13 +18,12 @@ public class Schedule {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @Column(nullable = false)
     private LocalDate date;
-
     @Column(nullable = false)
     private LocalDateTime startTime;
 

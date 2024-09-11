@@ -1,7 +1,9 @@
 package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Position;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.PositionRepository;
+import com.example.EmployeeManager.service.interfaces.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +12,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class PositionService {
+public class PositionServiceImpl implements PositionService {
     private final PositionRepository positionRepository;
 
     @Transactional
@@ -20,11 +22,12 @@ public class PositionService {
     }
 
     @Transactional
-    public Position createPositionHistory(Position position) {
-        Position byNameAndSalary = positionRepository.findByNameAndSalary(position.getName(), position.getSalary())
-                .orElseThrow(() -> new NoSuchElementException("Запись о данной позиции уже существует") );
-
-        return positionRepository.save(position);
+    public Position createPosition(Position position) {
+       if (positionRepository.findByNameAndSalary(position.getName(), position.getSalary()).isEmpty()) {
+           return positionRepository.save(position);
+       } else {
+           throw new RecordExistException(position.getName());
+       }
     }
 
     @Transactional
@@ -35,10 +38,9 @@ public class PositionService {
     @Transactional
     public Position updatePosition(Long id, Position position) {
         Position positionById = getPositionById(id);
-        positionById.setName(position.getName());
-        positionById.setGrade(position.getGrade());
-        positionById.setSalary(position.getSalary());
-        return positionById;
+            positionById.setName(position.getName());
+            positionById.setGrade(position.getGrade());
+            positionById.setSalary(position.getSalary());
+            return positionById;
     }
-
 }

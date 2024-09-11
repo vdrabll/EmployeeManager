@@ -4,7 +4,7 @@ create type salary_type as enum('SALARY', 'ADVANCE', 'BONUS', 'LEAVE', 'VOCATION
 create type location_type as enum('OFFICE', 'HOME');
 create type auth_roles as enum('CHIEF', 'EMPLOYEE');
 create type task_priority as enum('HIGH', 'LOW', 'MEDIUM');
-create type task_status as enum('BACKLOG','NOT_STARTED','IN_WORK','DONE');
+create type task_status as enum('BACKLOG','NOT_STARTED','IN_WORK','DONE','EXPIRED');
 
 create table if not exists roles(
     id  auth_roles primary key
@@ -18,7 +18,7 @@ create table if not exists department(
 
 create table if not exists position(
         id                  bigserial primary key,
-        grade               smallint not null unique,
+        grade               smallint not null,
         salary              numeric(38,2) not null,
         name                varchar(255) not null
 );
@@ -49,8 +49,8 @@ create table if not exists schedule(
          id                  bigserial primary key,
          employee_id         bigint references employee (id),
          date                date not null,
-         start_time          time not null,
-         end_time            time not null,
+         start_time          timestamp not null,
+         end_time            timestamp not null,
          location            location_type not null
 );
 

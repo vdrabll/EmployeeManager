@@ -2,11 +2,11 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Project;
-import com.example.EmployeeManager.repository.EmployeeRepository;
+import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.ProjectRepository;
-import lombok.NoArgsConstructor;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
+import com.example.EmployeeManager.service.interfaces.ProjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +14,9 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectService {
+public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     @Transactional
     public Project getProjectById(Long id) {
@@ -26,9 +26,11 @@ public class ProjectService {
 
     @Transactional
     public  Project createProject(Project project) {
-        Project byNameAndDescription = projectRepository.findByName(project.getName()).orElseThrow(()
-                        -> new NoSuchElementException(String.format("Проект с названием %s уже существует", project.getName())));
-        return projectRepository.save(project);
+        if (projectRepository.findByName(project.getName()).isEmpty()) {
+            return projectRepository.save(project);
+        } else {
+            throw new RecordExistException(project.getName());
+        }
     }
 
     @Transactional
@@ -47,9 +49,10 @@ public class ProjectService {
     @Transactional // TODO: исправить
     public Project addEmployeeToProject(Long id, Long empId) {
         Project project = getProjectById(id);
-        Employee employee = employeeRepository.getReferenceById(empId);
-        if (!project.getEmployees().contains(employee)) {
+        Employee employee = employeeService.getEmployeeById(empId);
+        if (project.getEmployees().stream().noneMatch(emp -> emp.getId().equals(empId))) {
             project.getEmployees().add(employee);
+            employee.getProjects().add(project);
         } else {
             throw new RuntimeException(String.format("Сотрудник по данному id: %s уже найден в списке участников проекта", id));
         }
@@ -59,13 +62,13 @@ public class ProjectService {
     @Transactional
     public Project removeEmployeeFromProject(Long id, Long empId) {
         Project project = getProjectById(id);
-        Employee employee = employeeRepository.getReferenceById(empId);
-        if (project.getEmployees().contains(employee)) {
+        Employee employee = employeeService.getEmployeeById(empId);
+        if (project.getEmployees().stream().anyMatch(emp -> emp.getId().equals(empId))) {
+            employee.getDepartment().remove(project);
             project.getEmployees().remove(employee);
         } else {
            throw new RuntimeException(String.format("Сотрудник по данному id: %s не найден в списке участников проекта", id));
         }
         return project;
     }
-
 }

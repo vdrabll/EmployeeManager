@@ -5,8 +5,7 @@ import com.example.EmployeeManager.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -28,12 +27,12 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @Column(nullable = false)
-    private Date deadline;
+    private LocalDate deadline;
 
     private Short estimate;
 
@@ -42,7 +41,7 @@ public class Task {
 
     private String type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "project_id")
     private Project project;
 

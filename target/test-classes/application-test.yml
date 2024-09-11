@@ -20,4 +20,4 @@ spring:
         # Change to your database dialect if not using H2
 
   liquibase:
-    enabled: false  # Disable Liquibase for tests if not needed
+    enabled: false  
