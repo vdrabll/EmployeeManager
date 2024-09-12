@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход для сотрудника</title>
+</head>
+<body>
+<h1>Вход для сотрудников</h1>
+<a href="сhief-login.html" target="_self">Вход для руководителей</a>
+<br><br>
+<form action="/api/v1/login" method="post">
+    <label for="username">Логин:</label>
+    <input type="text" id="username" name="username">
+    <br><br>
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password">
+    <br><br>
+    <button type="submit">Войти</button>
+
+</form>
+</body>
+</html>

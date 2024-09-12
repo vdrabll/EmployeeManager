@@ -1,10 +1,10 @@
 package com.example.EmployeeManager.service;
 
+import com.example.EmployeeManager.representation.DepartmentRepresentation;
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.DepartmentRepository;
-import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeService employeeService;
-    private final EmployeeRepository employeeRepository;
+    private final DepartmentRepresentation mapper;
 
     @Transactional
     public Department getDepartmentById(Long id) {
@@ -35,11 +35,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Transactional
-    public Department save(Department department) {
-        if (!departmentRepository.findByName(department.getName()).isPresent()) {
-            return departmentRepository.save(department);
+    public Department save(Department data) {
+        if (!departmentRepository.findByName(data.getName()).isPresent()) {
+            return departmentRepository.save(data);
         } else {
-            throw new RecordExistException(department.getName());
+            throw new RecordExistException(data.getName());
         }
     }
 

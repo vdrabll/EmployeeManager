@@ -109,12 +109,12 @@ class EmployeeServiceTest {
                 .fullName("Кручинина Алиса Николаевна")
                 .email("alice@sber.ru")
                 .build();
-        Employee updated =  employeeService.updateEmployee(1L, newEmployee);
+        Employee updated =  employeeService.updateEmployee(employee.getId(), newEmployee);
         System.out.println(updated.getFullName());
         employeeService.getAllEmployee(Pageable.unpaged()).forEach(employee1 -> System.out.println(employee1.getFullName()));
         assertEquals(updated.getFullName(), newEmployee.getFullName());
         assertEquals(updated.getEmail(), newEmployee.getEmail());
-        assertNotEquals(employeeService.getEmployeeById(chief.getId()).getFullName(), "Иванов Алексей Петрович");
+        assertNotEquals(employeeService.getEmployeeById(employee.getId()).getFullName(), "Иванов Алексей Петрович");
     }
 
     @Test

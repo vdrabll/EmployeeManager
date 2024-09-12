@@ -1,6 +1,7 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.entity.Task;
+import com.example.EmployeeManager.dto.TaskDTO;
+import com.example.EmployeeManager.representation.TaskRepresentation;
 import com.example.EmployeeManager.service.TaskServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,21 +18,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private final TaskServiceImpl taskService;
+    private final TaskRepresentation taskRepresentation;
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns task by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)
     })
     @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable Long id) {
-        return taskService.getTaskById(id);
+    public TaskDTO getTaskById(@PathVariable Long id) {
+        return taskRepresentation.getTaskById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Create task", method = "POST")
-    @PostMapping public Task saveTask(@RequestBody Task task) {
-        return taskService.saveTask(task);
+    @PostMapping public TaskDTO saveTask(@RequestBody TaskDTO task) {
+        return taskRepresentation.saveTask(task);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
@@ -39,8 +40,8 @@ public class TaskController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)
     })
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        return taskService.updateTask(id, task);
+    public TaskDTO updateTask(@PathVariable Long id, @RequestBody TaskDTO task) {
+        return taskRepresentation.updateTask(id, task);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
@@ -49,7 +50,7 @@ public class TaskController {
     })
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
+        taskRepresentation.deleteTask(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
@@ -57,8 +58,8 @@ public class TaskController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })
     @GetMapping("/employees/{id}")
-    public Page<Task> getAllTasksOfEmployee(@PathVariable Long id, @ParameterObject Pageable pageable) {
-        return taskService.getAllTasksOfEmployee(id, pageable);
+    public Page<TaskDTO> getAllTasksOfEmployee(@PathVariable Long id, @ParameterObject Pageable pageable) {
+        return taskRepresentation.getAllTasksOfEmployee(id, pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -67,7 +68,7 @@ public class TaskController {
             @Parameter(name = "task", in = ParameterIn.PATH, description = "Unique identifier of task", required = true)
     })
     @PostMapping("/employees/{id}")
-    public Task assignTaskToEmployee(@PathVariable Long id, @RequestBody Task task, @ParameterObject Pageable pageable) {
-        return taskService.assignTaskToEmployee(id, task, pageable);
+    public TaskDTO assignTaskToEmployee(@PathVariable Long id, @RequestBody TaskDTO task, @ParameterObject Pageable pageable) {
+        return taskRepresentation.assignTaskToEmployee(id, task, pageable);
     }
 }

@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SalaryHistoryRepositoryTest {
     @Autowired
     private SalaryHistoryRepository salaryHistoryRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
     private SalaryHistory salary;
     private SalaryHistory bonus;
     private Employee employee;
@@ -31,6 +33,7 @@ class SalaryHistoryRepositoryTest {
     void setUp() {
         pageable = Pageable.unpaged();
         employee = Employee.builder().fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
+        employeeRepository.save(employee);
         bonus = SalaryHistory.builder()
                 .employee(employee)
                 .salaryDate(LocalDate.of(2022, 3, 20))

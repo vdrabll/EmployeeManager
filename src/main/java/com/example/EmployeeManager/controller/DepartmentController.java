@@ -1,8 +1,8 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.entity.Department;
-import com.example.EmployeeManager.entity.Employee;
-import com.example.EmployeeManager.service.DepartmentServiceImpl;
+import com.example.EmployeeManager.dto.DepartmentDTO;
+import com.example.EmployeeManager.dto.EmployeeDTO;
+import com.example.EmployeeManager.representation.DepartmentRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/departments")
 public class DepartmentController {
 
-    private final DepartmentServiceImpl departmentService;
+    private final DepartmentRepresentation departmentRepresentation;
+
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns list for all departments", method = "GET")
     @GetMapping()
-    public Page<Department> getAllDepartments(@ParameterObject Pageable pageable) {
-         return departmentService.getAll(pageable);
+    public Page<DepartmentDTO> getAllDepartments(@ParameterObject Pageable pageable) {
+         return departmentRepresentation.getAllDepartments(pageable) ;
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
@@ -32,15 +33,15 @@ public class DepartmentController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @GetMapping("/{id}")
-    public Department getDepartmentById(@PathVariable("id") Long id) {
-        return departmentService.getDepartmentById(id);
+    public DepartmentDTO getDepartmentById(@PathVariable("id") Long id) {
+        return departmentRepresentation.getDepartmentById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Create new department", method = "POST")
     @PostMapping
-    public Department createDepartment(@RequestBody Department department) {
-        return departmentService.save(department);
+    public DepartmentDTO createDepartment(@RequestBody DepartmentDTO department) {
+        return departmentRepresentation.createDepartment(department);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -48,18 +49,17 @@ public class DepartmentController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @PutMapping("/{id}")
-    public Department updateDepartment(@PathVariable("id") Long id, @RequestBody Department department) {
-        return departmentService.updateDepartmentById(id, department);
+    public DepartmentDTO updateDepartment(@PathVariable("id") Long id, @RequestBody DepartmentDTO department) {
+        return departmentRepresentation.updateDepartment(id, department);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Delete department by giving id", method = "DELETE", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
-
     @DeleteMapping("/{id}")
     public void deleteDepartment(@PathVariable Long id) {
-        departmentService.delete(departmentService.getDepartmentById(id));
+        departmentRepresentation.deleteDepartment(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
@@ -67,8 +67,8 @@ public class DepartmentController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @GetMapping("/employees/{id}")
-    public Page<Employee> getAllEmployeesFromDepartment(@PathVariable Long id, @ParameterObject Pageable pageable) {
-        return departmentService.getAllEmployeesFromDepartment(id, pageable);
+    public Page<EmployeeDTO> getAllEmployeesFromDepartment(@PathVariable Long id, @ParameterObject Pageable pageable) {
+        return departmentRepresentation.getAllEmployeesFromDepartment(id, pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -77,7 +77,7 @@ public class DepartmentController {
     })
     @PostMapping("{id}/employees/{employeeId}")
     public void addEmployeeToDepartment(@PathVariable Long id, @PathVariable Long employeeId) {
-        departmentService.addEmployeeToDepartment(id, employeeId);
+        departmentRepresentation.addEmployeeToDepartment(id, employeeId);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -87,6 +87,6 @@ public class DepartmentController {
     })
     @DeleteMapping("/{id}/employees/{employeeId}")
     public void removeEmployeeFromDepartment(@PathVariable Long id, @PathVariable Long employeeId) {
-        departmentService.removeEmployeeFromDepartment(id,employeeId);
+        departmentRepresentation.removeEmployeeFromDepartment(id,employeeId);
     }
 }
