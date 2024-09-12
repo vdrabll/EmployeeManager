@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.entity.PositionHistory;
-import com.example.EmployeeManager.service.PositionHistoryServiceImpl;
+import com.example.EmployeeManager.dto.PositionHistoryDTO;
+import com.example.EmployeeManager.representation.PositionHistoryRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/position-histories")
 public class PositionHistoryController {
 
-    private final PositionHistoryServiceImpl positionHistoryService;
+    private final PositionHistoryRepresentation positionHistoryRepresentation;
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns position history record by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of record", required = true)
     })
     @GetMapping("/{id}")
-    public PositionHistory getPositionHistoryRecordById(@PathVariable Long id) {
-        return positionHistoryService.getPositionById(id);
+    public PositionHistoryDTO getPositionHistoryById(@PathVariable Long id) {
+        return positionHistoryRepresentation.getPositionHistoryById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Create position history record", method = "POST")
     @PostMapping
-    public PositionHistory createPositionHistory(@RequestBody PositionHistory positionHistory) {
-        return positionHistoryService.createPositionHistory(positionHistory);
+    public PositionHistoryDTO createPositionHistory(@RequestBody PositionHistoryDTO positionHistory) {
+        return positionHistoryRepresentation.createPositionHistory(positionHistory);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -38,6 +38,6 @@ public class PositionHistoryController {
     })
     @DeleteMapping("/{id}")
     public void deletePositionHistoryById(@PathVariable("id") Long id) {
-        positionHistoryService.deletePositionHistoryById(id);
+        positionHistoryRepresentation.deletePositionHistoryById(id);
     }
 }

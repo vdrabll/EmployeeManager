@@ -1,7 +1,8 @@
 package com.example.EmployeeManager.controller;
 
 
-import com.example.EmployeeManager.entity.Schedule;
+import com.example.EmployeeManager.dto.ScheduleDTO;
+import com.example.EmployeeManager.representation.ScheduleRepresentation;
 import com.example.EmployeeManager.service.ScheduleServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,15 +18,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/schedules")
 public class ScheduleController {
-    private final ScheduleServiceImpl scheduleService;
+    private final ScheduleRepresentation scheduleRepresentation;
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns Schedule by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of salary Schedule", required = true)
     })
     @GetMapping("/{id}")
-    public Schedule getScheduleById(@PathVariable Long id) {
-        return scheduleService.getScheduleById(id);
+    public ScheduleDTO getScheduleById(@PathVariable Long id) {
+        return scheduleRepresentation.getScheduleById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -34,7 +35,7 @@ public class ScheduleController {
     })
     @DeleteMapping("/{id}")
     public void deleteScheduleById(@PathVariable Long id) {
-        scheduleService.deleteScheduleById(id);
+        scheduleRepresentation.deleteScheduleById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -42,8 +43,8 @@ public class ScheduleController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of schedule", required = true)
     })
     @PutMapping("/{id}")
-    public Schedule updateSchedule(@PathVariable Long id, @RequestBody Schedule schedule) {
-        return scheduleService.updateSchedule(id, schedule);
+    public ScheduleDTO updateSchedule(@PathVariable Long id, @RequestBody ScheduleDTO schedule) {
+        return scheduleRepresentation.updateSchedule(id, schedule);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
@@ -51,7 +52,7 @@ public class ScheduleController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
     })
     @GetMapping("/employees/{id}")
-    public Page<Schedule> getScheduleOfEmployee(@PathVariable Long id, @ParameterObject Pageable pageable) {
-        return scheduleService.getScheduleOfEmployee(id, pageable);
+    public Page<ScheduleDTO> getScheduleOfEmployee(@PathVariable Long id, @ParameterObject Pageable pageable) {
+        return scheduleRepresentation.getScheduleOfEmployee(id, pageable);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.EmployeeManager.controller;
 
+import com.example.EmployeeManager.dto.PositionDTO;
 import com.example.EmployeeManager.entity.Position;
+import com.example.EmployeeManager.representation.PositionRepresentation;
 import com.example.EmployeeManager.service.PositionServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,15 +15,15 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/positions")
 public class PositionController {
-    private final PositionServiceImpl positionService;
+    final PositionRepresentation positionRepresentation;
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns position by giving id", method = "GET", parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
     @GetMapping("/{id}")
-    public Position getPositionById(@PathVariable("id") Long id) {
-        return positionService.getPositionById(id);
+    public PositionDTO getPositionById(@PathVariable("id") Long id) {
+        return positionRepresentation.getPositionById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -29,8 +31,8 @@ public class PositionController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of position", required = true)
     })
     @PostMapping
-    public Position createPosition(@RequestBody Position position) {
-        return positionService.createPosition(position);
+    public PositionDTO createPosition(@RequestBody Position position) {
+        return positionRepresentation.createPosition(position);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -39,7 +41,7 @@ public class PositionController {
     })
     @DeleteMapping("/{id}")
     public void deletePositionById(@PathVariable Long id) {
-        positionService.deletePositionById(id);
+        positionRepresentation.deletePositionById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
@@ -47,7 +49,7 @@ public class PositionController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
     })
     @PutMapping("/{id}")
-    public Position updatePosition(@PathVariable Long id, @RequestBody Position position) {
-        return positionService.updatePosition(id, position);
+    public PositionDTO updatePosition(@PathVariable Long id, @RequestBody PositionDTO position) {
+        return positionRepresentation.updatePosition(id, position);
     }
 }
