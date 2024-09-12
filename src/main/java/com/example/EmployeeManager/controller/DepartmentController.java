@@ -1,5 +1,7 @@
 package com.example.EmployeeManager.controller;
 
+import com.example.EmployeeManager.dto.DepartmentDTO;
+import com.example.EmployeeManager.dto.mapper.DepartmentMapping;
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.service.DepartmentServiceImpl;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
+    private final DepartmentMapping mapper;
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns list for all departments", method = "GET")
@@ -39,7 +42,7 @@ public class DepartmentController {
     @PreAuthorize("hasRole('ROLE_CHIEF')")
     @Operation(description = "Create new department", method = "POST")
     @PostMapping
-    public Department createDepartment(@RequestBody Department department) {
+    public Department createDepartment(@RequestBody DepartmentDTO department) {
         return departmentService.save(department);
     }
 
@@ -48,7 +51,7 @@ public class DepartmentController {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of department", required = true)
     })
     @PutMapping("/{id}")
-    public Department updateDepartment(@PathVariable("id") Long id, @RequestBody Department department) {
+    public Department updateDepartment(@PathVariable("id") Long id, @RequestBody DepartmentDTO department) {
         return departmentService.updateDepartmentById(id, department);
     }
 

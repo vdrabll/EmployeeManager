@@ -1,10 +1,11 @@
 package com.example.EmployeeManager.service;
 
+import com.example.EmployeeManager.dto.DepartmentDTO;
+import com.example.EmployeeManager.dto.mapper.DepartmentMapping;
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.DepartmentRepository;
-import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.NoSuchElementException;
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeService employeeService;
-    private final EmployeeRepository employeeRepository;
+    private final DepartmentMapping mapper;
 
     @Transactional
     public Department getDepartmentById(Long id) {
@@ -35,7 +36,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Transactional
-    public Department save(Department department) {
+    public Department save(DepartmentDTO data) {
+        Department department = mapper.fromDTO(data);
         if (!departmentRepository.findByName(department.getName()).isPresent()) {
             return departmentRepository.save(department);
         } else {
@@ -44,7 +46,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Transactional
-    public Department updateDepartmentById(Long id, Department department) {
+    public Department updateDepartmentById(Long id, DepartmentDTO department) {
         Department departmentById = getDepartmentById(id);
         departmentById.setName(department.getName());
         departmentById.setLocation(department.getLocation());

@@ -1,12 +1,12 @@
 package com.example.EmployeeManager.dto;
 
+import com.example.EmployeeManager.entity.Position;
 import lombok.*;
 
 import java.time.LocalDate;
 
 @Setter
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PositionHistoryDTO {

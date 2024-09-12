@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class LeaveDTO {
     private LocalDate startDate;
     private LocalDate endDate;
-    private Employee employee;
     private LeaveType type;
     private LeaveStatus status;
 }

@@ -1,5 +1,6 @@
 package com.example.EmployeeManager.service.interfaces;
 
+import com.example.EmployeeManager.dto.DepartmentDTO;
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
 import org.springframework.data.domain.Page;
@@ -12,9 +13,9 @@ public interface DepartmentService {
 
     Page<Department> getAll(Pageable pageable);
 
-    Department save(Department department);
+    Department save(DepartmentDTO department);
 
-    Department updateDepartmentById(Long id, Department department);
+    Department updateDepartmentById(Long id, DepartmentDTO department);
 
     void delete(Department department);
 

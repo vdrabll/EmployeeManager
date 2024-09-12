@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        {
+            max-width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+
+<table id="table" class="table table-striped">
+    <thead>
+    <tr>
+        <th> <a href="personal-page.html" target="_self">Личный кабинет</a></th>
+        <th> <a href="tasks-main-page.html" target="_self">Задачи</a></th>
+        <th> <a href="salary-page.html" target="_self">Доход</a></th>
+        <th> <a href="schedule-page.html" target="_self">Расписание и отпуска</a></th>
+        <th> <a href="get-dismissed.html" target="_self">Увольнение</a></th>
+    </tr>
+    </thead>
+    <tbody id="document-table-body"></tbody>
+</table>
+<h1 class="mt-5 mb-4">Отпуска</h1>
+<button class="btn btn-primary mb-3" onclick="openAddLeavePage()">Заявка на согласование отпуска</button>
+
+<div class="mb-3">
+    <label for="searchInput"></label><input type="text" id="searchInput" class="form-control"
+                                            placeholder="Search documents...">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function openAddLeavePage() {
+        window.location.href = 'leave-add.html';
+    }
+</script>
+</body>
+</html>
