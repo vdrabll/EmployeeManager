@@ -25,6 +25,8 @@ class LeaveRepositoryTest {
 
     @Autowired
     private LeaveRepository leaveRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
     private Leave vacationLeave;
     private Leave sickLeave;
     private Employee employee;
@@ -34,6 +36,7 @@ class LeaveRepositoryTest {
     void setUp() {
         pageable = Pageable.unpaged();
         employee = Employee.builder().fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
+        employeeRepository.save(employee);
         vacationLeave = Leave.builder()
                 .status(LeaveStatus.AGREED)
                 .type(LeaveType.VACATION)

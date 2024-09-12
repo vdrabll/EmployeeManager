@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.assertj</groupId>
@@ -108,6 +109,7 @@
 		</dependency>
 	</dependencies>
 
+
 	<build>
 		<plugins>
 			<plugin>
@@ -124,5 +126,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

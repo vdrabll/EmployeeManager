@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class ScheduleRepositoryTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
     private Schedule schedule;
     private Employee employee;
     private Pageable pageable;
@@ -29,6 +31,7 @@ class ScheduleRepositoryTest {
     void setUp() {
         pageable = Pageable.unpaged();
         employee = Employee.builder().fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
+        employeeRepository.save(employee);
         schedule = Schedule.builder()
                 .employee(employee)
                 .date(LocalDate.now())

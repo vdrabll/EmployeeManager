@@ -52,28 +52,5 @@
     </thead>
     <tbody id="task-table-body"></tbody>
 </table>
-<script>
-
-    function fillTaskTable(employeeId) {
-        axios.get('/api/v1/tasks//employee/' + employeeId)
-            .then(response => {
-                const taskData = response.data;
-                const taskTableBody = document.getElementById('task-table').getElementsByTagName('tbody')[0];
-
-                   taskData.forEach(item => {
-                    <td className="fixed-width-cell">${data.name}</td>
-                    <td className="fixed-width-cell">${data.description}</td>
-                    <td className="fixed-width-cell">${data.priority}</td>
-                    <td className="fixed-width-cell">${data.type}</td>
-                    <td className="fixed-width-cell">${data.status}</td>
-
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching salary history data: ', error);
-            });
-        fillTaskTable(1)
-    }
-</script>
 </body>
 </html>
