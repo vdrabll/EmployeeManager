@@ -42,7 +42,7 @@ public class SalaryScheduledTask {
                         .build()));
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 0 15 20 * * ")
     public void paymentSalary() {
         List<Employee> allWorkingEmployees = employeeRepositiry.findAll();
         allWorkingEmployees.forEach(employee ->

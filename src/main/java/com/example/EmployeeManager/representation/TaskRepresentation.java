@@ -4,12 +4,10 @@ import com.example.EmployeeManager.dto.TaskDTO;
 import com.example.EmployeeManager.entity.Task;
 import com.example.EmployeeManager.service.interfaces.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
 @RequiredArgsConstructor

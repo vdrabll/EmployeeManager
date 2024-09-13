@@ -44,5 +44,4 @@ public class PositionHistoryServiceImpl implements PositionHistoryService {
     public Page<PositionHistory> getAllByEmployeeId(Long employeeId, Pageable pageable) {
         return positionHistoryRepository.findByEmployee_Id(employeeId, pageable);
     }
-
 }
