@@ -3,19 +3,18 @@ package com.example.EmployeeManager.controller;
 import com.example.EmployeeManager.dto.PositionDTO;
 import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.representation.PositionRepresentation;
-import com.example.EmployeeManager.service.PositionServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/positions")
 public class PositionController {
-    final PositionRepresentation positionRepresentation;
+    private final PositionRepresentation positionRepresentation;
 
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Returns position by giving id", method = "GET", parameters = {

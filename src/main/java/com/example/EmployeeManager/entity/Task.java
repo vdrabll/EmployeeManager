@@ -5,6 +5,7 @@ import com.example.EmployeeManager.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
@@ -34,7 +35,7 @@ public class Task {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    private Short estimate;
+    private Duration estimate;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus status;

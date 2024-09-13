@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeService employeeService;
-    private final DepartmentRepresentation mapper;
 
     @Transactional
     public Department getDepartmentById(Long id) {

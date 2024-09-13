@@ -3,6 +3,7 @@ package com.example.EmployeeManager.representation;
 import com.example.EmployeeManager.dto.DepartmentDTO;
 import com.example.EmployeeManager.dto.EmployeeDTO;
 import com.example.EmployeeManager.entity.Department;
+import com.example.EmployeeManager.service.DepartmentServiceImpl;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public class DepartmentRepresentation {
         return toDTO(departmentService.save(data));
     }
 
-    public DepartmentDTO updateDepartment(Long id, DepartmentDTO department) { //TODO: проверить работает ли
+    public DepartmentDTO updateDepartment(Long id, DepartmentDTO department) {
         Department data = fromDTO(department);
         data.setId(id);
         return toDTO(departmentService.updateDepartmentById(id,data));

@@ -2,6 +2,8 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Task;
+import com.example.EmployeeManager.enums.TaskStatus;
+import com.example.EmployeeManager.exceptions.InvalidTaskStatusExeption;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.TaskRepository;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
@@ -12,7 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
+
+import static java.util.concurrent.TimeUnit.DAYS;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +29,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     public Task getTaskById(Long id) {
-        return taskRepository.findById(id).orElseThrow(()
+        Task task = taskRepository.findById(id).orElseThrow(()
                 -> new NoSuchElementException(String.format("Задача по данномому id: %s не найдена", id)));
+        task.setEstimate(Duration.ofDays(DAYS.toChronoUnit().between(task.getDeadline(), LocalDate.now())));
+        return task;
     }
 
     @Transactional
@@ -34,15 +42,22 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     public Task saveTask(Task task) {
-        if (taskRepository.findByNameAndEmployee(task.getName(), task.getEmployee()).isEmpty()) {
-            return taskRepository.save(task);
-        } else {
+        if (taskRepository.findByNameAndEmployee(task.getName(), task.getEmployee()).isPresent()) {
             throw new RecordExistException(task.getName());
         }
+
+        if (task.getStatus() == TaskStatus.EXPIRED) {
+            throw new InvalidTaskStatusExeption("Нельзя создать уже созданную задачу");
+        }
+        task.setEstimate(Duration.ofDays(DAYS.toChronoUnit().between(task.getDeadline(), LocalDate.now())));
+        return taskRepository.save(task);
     }
 
     @Transactional
     public Task updateTask(Long id, Task task) {
+        if (task.getStatus() == TaskStatus.DONE) {
+            throw new InvalidTaskStatusExeption("Нельзя изменять статус уже выполненных задач");
+        }
         Task taskById = getTaskById(id);
         taskById.setName(task.getName());
         taskById.setDescription(task.getDescription());

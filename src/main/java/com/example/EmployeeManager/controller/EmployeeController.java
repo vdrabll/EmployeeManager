@@ -1,8 +1,9 @@
 package com.example.EmployeeManager.controller;
 
 import com.example.EmployeeManager.dto.EmployeeDTO;
+import com.example.EmployeeManager.entity.Role;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.representation.EmployeeRepresentation;
-import com.example.EmployeeManager.service.EmployeeServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -36,11 +37,10 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasRole('ROLE_CHIEF')")
-    @Operation(description = "Create new employee", method = "POST", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
-    })
-    @PostMapping
+    @Operation(description = "Create new employee", method = "POST")
+    @PostMapping("/employee")
     public EmployeeDTO addEmployee(@RequestBody EmployeeDTO newEmployee) {
+        newEmployee.setRole(new Role(AuthRole.EMPLOYEE));
         return employeeRepresentation.addEmployee(newEmployee);
     }
 

@@ -21,7 +21,7 @@ public class TaskRepresentation {
     }
 
     TaskDTO toDto(Task task) {
-        TaskDTO dto = new TaskDTO(task.getName(), task.getDescription(), task.getPriority(), task.getDeadline(), task.getStatus(), task.getType());
+        TaskDTO dto = new TaskDTO(task.getName(), task.getDescription(), task.getPriority(), task.getDeadline(), task.getEstimate(), task.getStatus(), task.getType());
         return dto;
     }
 
@@ -57,6 +57,7 @@ public class TaskRepresentation {
                 .deadline(dto.getDeadline())
                 .status(dto.getStatus())
                 .type(dto.getType())
+                .estimate(dto.getEstimate())
                 .build();
         return task;
     }

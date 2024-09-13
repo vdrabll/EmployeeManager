@@ -30,7 +30,7 @@ public class LeaveController {
     @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
     @Operation(description = "Create new leave in database", method = "POST")
     @PostMapping()
-    public LeaveDTO createLeave( LeaveDTO leave) {
+    public LeaveDTO createLeave(LeaveDTO leave) {
         return leaveRepresentation.createLeave(leave);
     }
 

@@ -17,4 +17,5 @@ public interface TaskService {
     Page<Task> getAllTasksOfEmployee(Long employeeId, Pageable pageable);
 
     Task assignTaskToEmployee(Long employeeId, Task task, Pageable pageable);
+
 }

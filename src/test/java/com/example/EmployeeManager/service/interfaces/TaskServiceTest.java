@@ -68,7 +68,6 @@ class TaskServiceTest {
                 .employee(developer)
                 .project(project)
                 .deadline(LocalDate.of(2024, 6, 20))
-                .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
@@ -80,7 +79,6 @@ class TaskServiceTest {
                 .employee(tester)
                 .project(project)
                 .deadline(LocalDate.of(2024, 7, 5))
-                .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
@@ -90,7 +88,6 @@ class TaskServiceTest {
                 .priority(TaskPriority.HIGH)
                 .employee(tester)
                 .deadline(LocalDate.of(2024, 8, 5))
-                .estimate((short) 10)
                 .type( "подготовка")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
@@ -122,7 +119,6 @@ class TaskServiceTest {
                 .priority(TaskPriority.HIGH)
                 .employee(developer)
                 .deadline(LocalDate.of(2024, 8, 5))
-                .estimate((short) 10)
                 .type( "личные дела")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
@@ -143,7 +139,6 @@ class TaskServiceTest {
                 .priority(TaskPriority.HIGH)
                 .employee(tester)
                 .deadline(LocalDate.of(2024, 9, 5))
-                .estimate((short) 10)
                 .type( "собеседование")
                 .status(TaskStatus.BACKLOG)
                 .build();
@@ -183,7 +178,6 @@ class TaskServiceTest {
                 .priority(TaskPriority.HIGH)
                 .employee(developer)
                 .deadline(LocalDate.of(2024, 9, 10))
-                .estimate((short) 10)
                 .type( "проект")
                 .status(TaskStatus.NOT_STARTED)
                 .build());

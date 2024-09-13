@@ -65,7 +65,6 @@ class TaskRepositoryTest {
                 .employee(developer)
                 .project(project)
                 .deadline(LocalDate.of(2024, 6, 20))
-                .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)
                 .build();
@@ -77,7 +76,6 @@ class TaskRepositoryTest {
                 .employee(tester)
                 .project(project)
                 .deadline(LocalDate.of(2024, 7, 5))
-                .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)
                 .build();

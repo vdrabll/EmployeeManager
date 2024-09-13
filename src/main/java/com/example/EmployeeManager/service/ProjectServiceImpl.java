@@ -46,7 +46,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectById;
     }
 
-    @Transactional // TODO: исправить
+    @Transactional
     public Project addEmployeeToProject(Long id, Long empId) {
         Project project = getProjectById(id);
         Employee employee = employeeService.getEmployeeById(empId);

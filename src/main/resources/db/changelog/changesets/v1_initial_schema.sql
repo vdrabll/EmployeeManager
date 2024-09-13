@@ -90,7 +90,7 @@ create table if not exists task(
         priority            task_priority,
         employee_id         bigint references employee (id),
         deadline            date not null,
-        estimate            smallint,
+        estimate            numeric,
         status              task_status not null default 'BACKLOG':: task_status,
         type                varchar,
         project_id          bigint references project (id)
