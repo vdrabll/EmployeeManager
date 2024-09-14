@@ -2,6 +2,7 @@ package com.example.EmployeeManager.repository;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.SalaryHistory;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.enums.SalaryType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class SalaryHistoryRepositoryTest {
     @BeforeEach
     void setUp() {
         pageable = Pageable.unpaged();
-        employee = Employee.builder().fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
+        employee = Employee.builder().role(AuthRole.EMPLOYEE).fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
         employeeRepository.save(employee);
         bonus = SalaryHistory.builder()
                 .employee(employee)

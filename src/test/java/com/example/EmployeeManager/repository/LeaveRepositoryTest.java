@@ -2,6 +2,7 @@ package com.example.EmployeeManager.repository;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Leave;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.enums.LeaveStatus;
 import com.example.EmployeeManager.enums.LeaveType;
 import org.junit.jupiter.api.AfterEach;
@@ -35,7 +36,7 @@ class LeaveRepositoryTest {
     @BeforeEach
     void setUp() {
         pageable = Pageable.unpaged();
-        employee = Employee.builder().fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
+        employee = Employee.builder().role(AuthRole.EMPLOYEE).fullName( "Иванов Петр Петрович").email("example@sber.ru").build();
         employeeRepository.save(employee);
         vacationLeave = Leave.builder()
                 .status(LeaveStatus.AGREED)
@@ -64,7 +65,7 @@ class LeaveRepositoryTest {
     @Test
     void findByEmployeeTest() {
         List testLeaves = List.of(vacationLeave, sickLeave);
-        List<Leave> leaves = leaveRepository.findByEmployee(employee, pageable).toList();
+        List<Leave> leaves = leaveRepository.findByEmployee_Id(employee.getId(), pageable).toList();
         assertNotNull(leaves);
         assertThat(leaves).isEqualTo(testLeaves);
     }
@@ -77,5 +78,4 @@ class LeaveRepositoryTest {
         assertNotNull(leaves);
         assertThat(leaves).isEqualTo(testLeaves);
     }
-
 }

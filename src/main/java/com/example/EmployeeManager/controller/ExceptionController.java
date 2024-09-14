@@ -11,34 +11,42 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class ExceptionController {
     @ExceptionHandler(InvalidLeaveDateExeption.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO InvalidLeaveDateExeption(Exception e) {
+    public ErrorDTO InvalidLeaveDateExeption(InvalidLeaveDateExeption e) {
         return new ErrorDTO(HttpStatus.BAD_REQUEST.name(), e.getLocalizedMessage());
     }
 
     @ExceptionHandler(InvalidTaskStatusExeption.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO InvalidTaskStatusExeption(Exception e) {
+    public ErrorDTO InvalidTaskStatusExeption(InvalidTaskStatusExeption e) {
         return new ErrorDTO(HttpStatus.BAD_REQUEST.name(), e.getLocalizedMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorDTO NotFoundException(Exception e) {
+    public ErrorDTO NotFoundException(NotFoundException e) {
         return new ErrorDTO(HttpStatus.NOT_FOUND.name(), e.getLocalizedMessage());
     }
 
     @ExceptionHandler(RecordExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
-    public ErrorDTO RecordExistException(Exception e) {
+    public ErrorDTO RecordExistException(RecordExistException e) {
         return new ErrorDTO(HttpStatus.CONFLICT.name(), e.getLocalizedMessage());
     }
 
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorDTO NoSuchElementException(NoSuchElementException e) {
+        return new ErrorDTO(HttpStatus.NOT_FOUND.name(), e.getLocalizedMessage());
+    }
 }

@@ -7,6 +7,7 @@ import com.example.EmployeeManager.service.TaskServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -15,18 +16,14 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class TasksScheduledTask {
-    private final TaskServiceImpl taskService;
     private final TaskRepository taskRepository;
 
+    @Transactional
     @Scheduled(cron = "0 0 9 * * *")
     public void taskCheck() {
-        List<Task> allTasks = taskRepository.findAll();
-        allTasks.forEach(task ->  checkIfNotExpired(task));
-    }
-
-    private void checkIfNotExpired(Task task) {
-        if (task.getDeadline().isAfter(LocalDate.now())) {
-            task.setStatus(TaskStatus.EXPIRED);
-        }
+        taskRepository.findAll()
+                .stream()
+                .filter(task -> task.getDeadline().isAfter(LocalDate.now()))
+                .forEach(task -> task.setStatus(TaskStatus.EXPIRED));
     }
 }

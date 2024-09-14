@@ -1,9 +1,10 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.DepartmentDTO;
-import com.example.EmployeeManager.dto.EmployeeDTO;
+import com.example.EmployeeManager.dto.DepartmentCreateDTO;
+import com.example.EmployeeManager.dto.DepartmentReturnDTO;
+import com.example.EmployeeManager.dto.EmployeeCreateDTO;
+import com.example.EmployeeManager.dto.EmployeeReturnDTO;
 import com.example.EmployeeManager.entity.Department;
-import com.example.EmployeeManager.service.DepartmentServiceImpl;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,22 +17,23 @@ public class DepartmentRepresentation {
     private final DepartmentService departmentService;
     private final EmployeeRepresentation employeeRepresentation;
 
-    public Page<DepartmentDTO> getAllDepartments(Pageable pageable) {
+    public Page<DepartmentReturnDTO> getAllDepartments(Pageable pageable) {
         return departmentService.getAll(pageable).map(this::toDTO);
     }
 
-    public DepartmentDTO createDepartment(DepartmentDTO department) {
+    public DepartmentReturnDTO createDepartment(DepartmentCreateDTO department) {
         Department data = fromDTO(department);
-        return toDTO(departmentService.save(data));
+        departmentService.save(data);
+        return toDTO(data);
     }
 
-    public DepartmentDTO updateDepartment(Long id, DepartmentDTO department) {
+    public DepartmentReturnDTO updateDepartment(Long id, DepartmentCreateDTO department) {
         Department data = fromDTO(department);
         data.setId(id);
-        return toDTO(departmentService.updateDepartmentById(id,data));
+        return toDTO(departmentService.updateDepartmentById(data));
     }
 
-    public DepartmentDTO getDepartmentById(Long id) {
+    public DepartmentReturnDTO getDepartmentById(Long id) {
         return toDTO(departmentService.getDepartmentById(id));
     }
 
@@ -39,7 +41,7 @@ public class DepartmentRepresentation {
         departmentService.delete(departmentService.getDepartmentById(id));
     }
 
-    public Page<EmployeeDTO> getAllEmployeesFromDepartment(Long id, Pageable pageable) {
+    public Page<EmployeeReturnDTO> getAllEmployeesFromDepartment(Long id, Pageable pageable) {
          return departmentService.getAllEmployeesFromDepartment(id, pageable).map(employeeRepresentation::toDTO);
     }
 
@@ -51,16 +53,15 @@ public class DepartmentRepresentation {
         departmentService.removeEmployeeFromDepartment(id,employeeId);
     }
 
-    public Department fromDTO(DepartmentDTO dto) {
+    public Department fromDTO(DepartmentCreateDTO dto) {
         Department department = Department.builder()
-                .name(dto.getName())
-                .location(dto.getLocation())
+                .name(dto.name())
+                .location(dto.location())
                 .build();
         return department;
     }
 
-    public DepartmentDTO toDTO(Department department) {
-        DepartmentDTO dto = new DepartmentDTO(department.getName(), department.getLocation());
-        return dto;
+    public DepartmentReturnDTO toDTO(Department department) {
+        return new DepartmentReturnDTO(department.getId(), department.getName(), department.getLocation());
     }
 }

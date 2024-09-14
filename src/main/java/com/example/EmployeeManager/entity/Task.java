@@ -35,8 +35,6 @@ public class Task {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    private Duration estimate;
-
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 

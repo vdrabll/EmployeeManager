@@ -1,6 +1,7 @@
 package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Position;
+import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.repository.PositionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +75,7 @@ class PositionServiceTest {
     @Test
     void deletePositionById() {
         positionService.deletePositionById(developerPosition.getId());
-        assertThrows(NoSuchElementException.class, () -> positionService.getPositionById(developerPosition.getId()));
+        assertThrows(NotFoundException.class, () -> positionService.getPositionById(developerPosition.getId()));
     }
 
     @Test

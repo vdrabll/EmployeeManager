@@ -1,6 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/changesets/v1_initial_schema.sql
-  - include:
-      file: db/changelog/changesets/v1_add_base_data.sql
+
 

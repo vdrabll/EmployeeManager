@@ -2,9 +2,9 @@ package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.repository.DepartmentRepository;
 import com.example.EmployeeManager.repository.EmployeeRepository;
-import com.example.EmployeeManager.repository.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,8 +26,7 @@ class EmployeeServiceTest {
     private EmployeeRepository employeeRepository;
     @Autowired
     private DepartmentRepository departmentRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+
     @Autowired
     EmployeeService employeeService;
     private Employee chief;
@@ -34,33 +34,40 @@ class EmployeeServiceTest {
     private Department department;
     private Pageable pageable;
 
+    @Transactional
     @BeforeEach
     void setUp() {
         pageable = Pageable.unpaged();
         chief = Employee.builder()
+                .role(AuthRole.CHIEF)
                 .isWorkingNow(true)
                 .fullName("Иванов Алексей Петрович")
                 .email("example@sber.ru")
                 .build();
         employeeRepository.save(chief);
-        employee = Employee.builder()
+
+        employee =Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .isWorkingNow(true)
                 .fullName("Аров Иван Иванович")
                 .email("example@yandex.ru")
                 .build();
         employeeRepository.save(employee);
-        department = departmentRepository.save(Department.builder()
-                .name("ПензаТех")
-                .location("Пенз 666")
-                .employees(List.of(chief,employee))
-                .build());
 
+        department = Department.builder()
+                .name("ПензаТех")
+                .location("Пенза 666")
+                .build();
+       departmentRepository.save(department);
+       department.setEmployees(List.of(employee, chief));
+       departmentRepository.save(department);
     }
 
+    @Transactional
     @AfterEach
     void tearDown() {
-        roleRepository.deleteAll();
         employeeRepository.deleteAll();
+        departmentRepository.deleteAll();
     }
 
     @Test
@@ -105,6 +112,7 @@ class EmployeeServiceTest {
     @Test
     void updateEmployee() {
         Employee newEmployee = Employee.builder()
+                .id(22L)
                 .isWorkingNow(true)
                 .fullName("Кручинина Алиса Николаевна")
                 .email("alice@sber.ru")

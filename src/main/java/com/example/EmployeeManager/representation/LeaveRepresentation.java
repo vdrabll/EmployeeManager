@@ -1,24 +1,24 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.LeaveDTO;
+import com.example.EmployeeManager.dto.LeaveCreateDTO;
+import com.example.EmployeeManager.dto.LeaveReturnDTO;
 import com.example.EmployeeManager.entity.Leave;
 import com.example.EmployeeManager.service.interfaces.LeaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
 public class LeaveRepresentation {
     private final LeaveService leaveService;
 
-    public LeaveDTO getLeaveById(Long id) {
+    public LeaveReturnDTO getLeaveById(Long id) {
         return toDto(leaveService.getLeaveById(id));
     }
 
-    public LeaveDTO createLeave(@RequestBody LeaveDTO leave) {
+    public LeaveReturnDTO createLeave( LeaveCreateDTO leave) {
         return toDto(leaveService.createLeave(fromDto(leave)));
     }
 
@@ -26,16 +26,18 @@ public class LeaveRepresentation {
         leaveService.deleteLeaveById(id);
     }
 
-    public void rescheduleLeave( Long id,  LeaveDTO leave) {
+    public void rescheduleLeave(Long id, LeaveCreateDTO leave) {
+
         leaveService.rescheduleLeave(id, fromDto(leave));
     }
 
-    public Page<LeaveDTO> getAllByEmployee(Long id, Pageable pageable) {
+    public Page<LeaveReturnDTO> getAllByEmployee(Long id, Pageable pageable) {
         return leaveService.getAllByEmployee(id, pageable).map(this::toDto);
     }
 
-    public LeaveDTO toDto(Leave leave) {
-        LeaveDTO dto = new LeaveDTO(
+    public LeaveReturnDTO toDto(Leave leave) {
+        LeaveReturnDTO dto = new LeaveReturnDTO(
+                leave.getId(),
                 leave.getStartDate(),
                 leave.getEndDate(),
                 leave.getType(),
@@ -43,12 +45,12 @@ public class LeaveRepresentation {
         return dto;
     }
 
-    public Leave fromDto(LeaveDTO dto) {
+    public Leave fromDto(LeaveCreateDTO dto) {
         Leave leave = Leave.builder()
-                .startDate(dto.getStartDate())
-                .endDate(dto.getEndDate())
-                .type(dto.getType())
-                .status(dto.getStatus())
+                .startDate(dto.startDate())
+                .endDate(dto.endDate())
+                .type(dto.type())
+                .status(dto.status())
                 .build();
         return leave;
     }

@@ -2,6 +2,7 @@ package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.SalaryHistory;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.enums.SalaryType;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.SalaryHistoryRepository;
@@ -36,6 +37,7 @@ class SalaryHistoryServiceTest {
     @BeforeEach
     void setUp() {
         employee = employeeRepository.save(Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .fullName("Янкова Алла Вячаславовна")
                 .email("alla@sber.ru")
                 .build());
@@ -49,7 +51,7 @@ class SalaryHistoryServiceTest {
                 .employee(employee)
                 .salaryDate(LocalDate.of(2022, 3, 20))
                 .amount(BigDecimal.valueOf(16000))
-                .type(SalaryType.BONUS)
+                .type(SalaryType.SALARY)
                 .build());
     }
 
@@ -77,6 +79,8 @@ class SalaryHistoryServiceTest {
                 .type(SalaryType.BONUS)
                 .build());
         Page<SalaryHistory> history = salaryHistoryService.getSalaryHistoryOfEmployee(employee.getId(), Pageable.unpaged());
+        history.forEach(salaryHistory -> System.out.println(salaryHistory.getType()));
+        history.forEach(salaryHistory -> System.out.println(salaryHistory.getAmount()));
         assertEquals(3, history.getTotalElements());
         assertNotEquals(2, history.getTotalElements());
 

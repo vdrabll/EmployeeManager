@@ -2,13 +2,8 @@ create type leave_type as enum('VACATION', 'SICK', 'UNPAID', 'FAMILY_CIRCUMSTANC
 create type leave_status as enum('ON_REVIEW', 'AGREED', 'REJECTED');
 create type salary_type as enum('SALARY', 'ADVANCE', 'BONUS', 'LEAVE', 'VOCATION');
 create type location_type as enum('OFFICE', 'HOME');
-create type auth_roles as enum('CHIEF', 'EMPLOYEE');
 create type task_priority as enum('HIGH', 'LOW', 'MEDIUM');
 create type task_status as enum('BACKLOG','NOT_STARTED','IN_WORK','DONE','EXPIRED');
-
-create table if not exists roles(
-    id  auth_roles primary key
-);
 
 create table if not exists department(
          id                  bigserial primary key,
@@ -28,7 +23,7 @@ create table if not exists employee(
         is_working_now      boolean default true,
         full_name           varchar(100) not null,
         email               varchar(255) not null,
-        role_id                auth_roles references roles(id)
+        role                varchar not null
 );
 
 create table if not exists position_history(
@@ -57,7 +52,7 @@ create table if not exists schedule(
 create table if not exists employees_departments(
          employee_id          bigint references employee (id),
          department_id        bigint references department (id),
-         constraint employees_departments_constraint primary key (employee_id, department_id)
+         primary key (employee_id, department_id)
 );
 
 create table if not exists leave(
@@ -90,8 +85,14 @@ create table if not exists task(
         priority            task_priority,
         employee_id         bigint references employee (id),
         deadline            date not null,
-        estimate            numeric,
         status              task_status not null default 'BACKLOG':: task_status,
         type                varchar,
         project_id          bigint references project (id)
+);
+
+create table if not exists salary_coefficients (
+        id                   bigserial primary key,
+        year                 date not null,
+        advance_percentage   numeric(38,2) not null,
+        bonus_percentage     numeric(38,2) not null
 );

@@ -1,11 +1,8 @@
-CREATE CAST (varchar AS auth_roles) WITH INOUT AS IMPLICIT;
 
-INSERT INTO roles (id) VALUES ('EMPLOYEE');
-INSERT INTO roles (id) VALUES ('CHIEF');
 
-INSERT INTO employee (is_working_now, full_name, email, role_id) VALUES (TRUE, 'Симонова Мария Кайна', 'Mary@sber.ru', 'EMPLOYEE');
-INSERT INTO employee (is_working_now, full_name, email, role_id) VALUES (TRUE, '<Стоматин Петр Петрович>', 'ILoveTwirin@google.com', 'EMPLOYEE');
-INSERT INTO employee (is_working_now, full_name, email, role_id) VALUES (TRUE, 'Полежайкина Жанна Дмитриевна', 'jelannay@sber.ru', 'CHIEF');
+INSERT INTO employee (is_working_now, full_name, email, role) VALUES (TRUE, 'Симонова Мария Кайна', 'Mary@sber.ru', 'EMPLOYEE');
+INSERT INTO employee (is_working_now, full_name, email, role) VALUES (TRUE, '<Стоматин Петр Петрович>', 'ILoveTwirin@google.com', 'EMPLOYEE');
+INSERT INTO employee (is_working_now, full_name, email, role) VALUES (TRUE, 'Полежайкина Жанна Дмитриевна', 'jelannay@sber.ru', 'CHIEF');
 
 
 INSERT INTO department (name, location) VALUES ('Отдел продаж', 'Москва');
@@ -44,5 +41,7 @@ INSERT INTO salary_history (employee_id, salary_date, amount, type) VALUES (1, '
 INSERT INTO salary_history (employee_id, salary_date, amount, type) VALUES (2, '2022-01-01', 70000, 'SALARY');
 
 -- Создание таблицы задач
-INSERT INTO task (name, description, priority, employee_id, deadline, estimate, status, type, project_id) VALUES ('Задача 1', 'Описание первой задачи', 'HIGH', 1, '2022-01-01', 10, 'IN_WORK', 'Разработка', 1);
-INSERT INTO task (name, description, priority, employee_id, deadline, estimate, status, type, project_id) VALUES ('Задача 2', 'Описание второй задачи', 'MEDIUM', 2, '2022-01-01', 5, 'IN_WORK', 'Аналитика', 2);
+INSERT INTO task (name, description, priority, employee_id, deadline, status, type, project_id) VALUES ('Задача 1', 'Описание первой задачи', 'HIGH', 1, '2022-01-01', 'IN_WORK', 'Разработка', 1);
+INSERT INTO task (name, description, priority, employee_id, deadline, status, type, project_id) VALUES ('Задача 2', 'Описание второй задачи', 'MEDIUM', 2, '2022-01-01', 'IN_WORK', 'Аналитика', 2);
+
+INSERT INTO salary_coefficients (year, advance_percentage, bonus_percentage) VALUES ('2024-01-01', 30.00, 40.00);

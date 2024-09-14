@@ -1,6 +1,8 @@
 package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Project;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProjectService {
 
@@ -15,4 +17,7 @@ public interface ProjectService {
     Project addEmployeeToProject(Long id, Long empId);
 
     Project removeEmployeeFromProject(Long id, Long empId);
+
+    Page<Project> getAll(Pageable pageable);
+
 }

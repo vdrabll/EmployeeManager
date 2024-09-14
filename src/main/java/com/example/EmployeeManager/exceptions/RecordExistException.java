@@ -7,6 +7,6 @@ public class RecordExistException extends RuntimeException {
     }
 
     public RecordExistException(String message) {
-        System.out.println(String.format("Record with %s already exists", message));
+        super(message);
     }
 }

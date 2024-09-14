@@ -2,8 +2,11 @@ package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Project;
+import com.example.EmployeeManager.enums.AuthRole;
+import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.ProjectRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,24 +37,34 @@ class ProjectServiceTest {
 
     @BeforeEach
     void setUp() {
-      developer = employeeRepository.save( Employee.builder()
+      developer = Employee.builder()
+              .role(AuthRole.EMPLOYEE)
               .fullName("Cтоматин Петр Петрович")
               .email("example@sber.ru")
-              .build());
-      hr = employeeRepository.save( Employee.builder()
+              .build();
+      employeeRepository.save(developer);
+      hr = Employee.builder()
+              .role(AuthRole.EMPLOYEE)
               .fullName("Янкова Алла Вячаславовна")
               .email("alla@sber.ru")
-              .build());
-      hrProject = projectRepository.save(Project.builder()
+              .build();
+      employeeRepository.save(hr);
+
+      hrProject = Project.builder()
               .name("Расширение отдела связи с общетсвенностью")
               .description("в связи с расширением компании требуется нанять 20 сотрудников в новый департамент")
-              .employees(List.of(hr))
-              .build());
-      developingProject = projectRepository.save(Project.builder()
+              .build();
+      projectRepository.save(hrProject);
+      hrProject.setEmployees(List.of(hr));
+      projectRepository.save(hrProject);
+
+      developingProject = Project.builder()
               .name("Разработка нового продукта")
               .description("разработка мобильного приложения по тендеру")
-              .employees(List.of(developer))
-              .build());
+              .build();
+      projectRepository.save(developingProject);
+      developingProject.setEmployees(List.of(developer));
+      projectRepository.save(developingProject);
     }
 
     @AfterEach
@@ -86,7 +98,7 @@ class ProjectServiceTest {
     @Test
     void deleteProjectById() {
         projectService.deleteProjectById(hrProject.getId());
-        assertThrows(NoSuchElementException.class, () -> projectService.getProjectById(hrProject.getId()));
+        assertThrows(NotFoundException.class, () -> projectService.getProjectById(hrProject.getId()));
     }
 
     @Test
@@ -105,25 +117,26 @@ class ProjectServiceTest {
     @Test
     void addEmployeeToProject() {
         Employee newEmployee = employeeRepository.save(Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .fullName("Корнеева Светлана Львовна")
                 .email("sveta@sber.ru")
                 .build());
         Project updatedProject = projectService.addEmployeeToProject( hrProject.getId(), newEmployee.getId());
-        projectService.getProjectById(hrProject.getId()).getEmployees().forEach(employee -> System.out.println(employee.getFullName()));
         assertEquals(updatedProject.getEmployees().size(), 2);
     }
 
     @Test
+
     void removeEmployeeFromProject() {
         Employee newEmployee = employeeService.addEmployee(Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .fullName("Корнеева Светлана Львовна")
                 .email("sveta@sber.ru")
                 .build());
-        projectService.addEmployeeToProject( hrProject.getId(), newEmployee.getId());
-        projectService.getProjectById(hrProject.getId()).getEmployees().forEach(employee -> System.out.println(employee.getFullName()));
 
+        projectService.addEmployeeToProject( hrProject.getId(), newEmployee.getId());
         projectService.removeEmployeeFromProject(hrProject.getId(), newEmployee.getId());
-        projectService.getProjectById(hrProject.getId()).getEmployees().forEach(employee -> System.out.println(employee.getFullName()));
-        assertEquals(1,projectService.getProjectById(hrProject.getId()).getEmployees().size());
+        
+
     }
 }

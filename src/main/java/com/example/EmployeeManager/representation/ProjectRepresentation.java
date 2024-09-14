@@ -1,9 +1,12 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.ProjectDTO;
+import com.example.EmployeeManager.dto.ProjectCreateDTO;
+import com.example.EmployeeManager.dto.ProjectReturnDTO;
 import com.example.EmployeeManager.entity.Project;
 import com.example.EmployeeManager.service.interfaces.ProjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -11,11 +14,11 @@ import org.springframework.stereotype.Controller;
 public class ProjectRepresentation {
     private final ProjectService projectService;
 
-    public ProjectDTO getProjectById(Long id) {
+    public ProjectReturnDTO getProjectById(Long id) {
         return toDTO(projectService.getProjectById(id));
     }
 
-    public ProjectDTO createProject(ProjectDTO project) {
+    public ProjectReturnDTO createProject(ProjectCreateDTO project) {
         return toDTO(projectService.createProject(fromDTO(project)));
     }
 
@@ -23,29 +26,32 @@ public class ProjectRepresentation {
         projectService.deleteProjectById(id);
     }
 
-    public ProjectDTO updateProject(Long id, ProjectDTO project) {
+    public ProjectReturnDTO updateProject(Long id, ProjectCreateDTO project) {
         Project data = fromDTO(project);
         data.setId(id);
-        return toDTO(projectService.updateProject(id,data));
+        return toDTO(projectService.updateProject(id, data));
     }
 
-    public ProjectDTO addEmployeeToProject(Long id, Long employeeId) {
+    public Page<ProjectReturnDTO> getAll(Pageable pageable) {
+        return projectService.getAll(pageable).map(this::toDTO);
+    }
+
+    public ProjectReturnDTO addEmployeeToProject(Long id, Long employeeId) {
         return toDTO(projectService.addEmployeeToProject(id, employeeId));
     }
 
-    public ProjectDTO removeEmployeeFromProject(Long id, Long employeeId) {
+    public ProjectReturnDTO removeEmployeeFromProject(Long id, Long employeeId) {
         return toDTO(projectService.removeEmployeeFromProject(id, employeeId));
     }
 
-    ProjectDTO toDTO(Project project) {
-        ProjectDTO dto = new ProjectDTO(project.getName(), project.getDescription());
-        return dto;
+    ProjectReturnDTO toDTO(Project project) {
+        return new ProjectReturnDTO(project.getId(), project.getName(), project.getDescription());
     }
 
-    Project fromDTO(ProjectDTO dto) {
+    Project fromDTO(ProjectCreateDTO dto) {
         Project project = Project.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
+                .name(dto.name())
+                .description(dto.description())
                 .build();
         return project;
     }

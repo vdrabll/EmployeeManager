@@ -2,7 +2,6 @@ package com.example.EmployeeManager.repository;
 
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
-import com.example.EmployeeManager.entity.Role;
 import com.example.EmployeeManager.enums.AuthRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,25 +18,21 @@ class DepartmentRepositoryTest {
 
     @Autowired
     private DepartmentRepository departmentRepository;
-    @Autowired
-    private RoleRepository roleRepository;
     private Department firtsDepartment;
     private Employee chief;
     private Employee employee;
-    private Role roleEmployee;
-    private Role roleChief;
+
 
     @BeforeEach
     public  void setUp() {
-        roleChief = roleRepository.save(new Role(AuthRole.CHIEF));
-        roleEmployee = roleRepository.save(new Role(AuthRole.EMPLOYEE));
+
         chief = Employee.builder()
-                .role(roleEmployee)
+                .role(AuthRole.CHIEF)
                 .fullName( "Иванов Петр Петрович")
                 .email("example@sber.ru")
                 .build();
         employee = Employee.builder()
-                .role(roleChief)
+                .role(AuthRole.EMPLOYEE)
                 .fullName( "Иванов Иван Петрович")
                 .email("example@yandex.ru")
                 .build();
