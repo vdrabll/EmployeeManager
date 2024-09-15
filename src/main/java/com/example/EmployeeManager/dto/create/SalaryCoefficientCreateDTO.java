@@ -1,9 +1,9 @@
-package com.example.EmployeeManager.dto;
+package com.example.EmployeeManager.dto.create;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record SalaryHistoryRepositoryCreateDTO(
+public record SalaryCoefficientCreateDTO(
         LocalDate date,
         BigDecimal advancePercentage,
         BigDecimal bonusPercentage) {

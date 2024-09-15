@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.SalaryCoefficientCreateDTO;
+import com.example.EmployeeManager.dto.create.SalaryCoefficientCreateDTO;
 import com.example.EmployeeManager.dto.SalaryCoefficientReturnDTO;
 import com.example.EmployeeManager.representation.SalaryCoefficientRepresentation;
 import io.swagger.v3.oas.annotations.Operation;

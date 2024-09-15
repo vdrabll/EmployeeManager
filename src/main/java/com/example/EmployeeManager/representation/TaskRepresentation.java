@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.TaskCreateDTO;
+import com.example.EmployeeManager.dto.create.TaskCreateDTO;
 import com.example.EmployeeManager.dto.TaskReturnDTO;
 import com.example.EmployeeManager.entity.Task;
 import com.example.EmployeeManager.service.interfaces.TaskService;
@@ -41,7 +41,7 @@ public class TaskRepresentation {
         return toDto(taskService.assignTaskToEmployee(id, fromDto(task), pageable));
     }
 
-    TaskReturnDTO toDto(Task task) {
+    private TaskReturnDTO toDto(Task task) {
         return TaskReturnDTO.builder()
                 .id(task.getId())
                 .name(task.getName())
@@ -54,7 +54,7 @@ public class TaskRepresentation {
     }
 
 
-    Task fromDto(TaskCreateDTO dto) {
+    private Task fromDto(TaskCreateDTO dto) {
         Task task = Task.builder()
                 .name(dto.name())
                 .description(dto.description())

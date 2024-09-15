@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.ProjectCreateDTO;
+import com.example.EmployeeManager.dto.create.ProjectCreateDTO;
 import com.example.EmployeeManager.dto.ProjectReturnDTO;
 import com.example.EmployeeManager.representation.ProjectRepresentation;
 import io.swagger.v3.oas.annotations.Operation;

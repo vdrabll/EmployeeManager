@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.representation;
 
 
-import com.example.EmployeeManager.dto.PositionHistoryCreateDTO;
+import com.example.EmployeeManager.dto.create.PositionHistoryCreateDTO;
 import com.example.EmployeeManager.dto.PositionHistoryReturnDTO;
 import com.example.EmployeeManager.entity.PositionHistory;
 import com.example.EmployeeManager.service.interfaces.PositionHistoryService;

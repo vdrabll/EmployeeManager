@@ -1,4 +1,4 @@
-package com.example.EmployeeManager.dto;
+package com.example.EmployeeManager.dto.create;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

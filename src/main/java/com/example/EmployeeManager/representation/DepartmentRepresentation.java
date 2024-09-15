@@ -1,8 +1,7 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.DepartmentCreateDTO;
+import com.example.EmployeeManager.dto.create.DepartmentCreateDTO;
 import com.example.EmployeeManager.dto.DepartmentReturnDTO;
-import com.example.EmployeeManager.dto.EmployeeCreateDTO;
 import com.example.EmployeeManager.dto.EmployeeReturnDTO;
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;

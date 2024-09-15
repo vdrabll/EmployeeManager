@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.ScheduleCreateDTO;
+import com.example.EmployeeManager.dto.create.ScheduleCreateDTO;
 import com.example.EmployeeManager.dto.ScheduleReturnDTO;
 import com.example.EmployeeManager.entity.Schedule;
 import com.example.EmployeeManager.service.interfaces.ScheduleService;

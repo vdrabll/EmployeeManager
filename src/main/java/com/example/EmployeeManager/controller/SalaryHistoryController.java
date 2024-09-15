@@ -1,8 +1,6 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.SalaryHistoryCreateDTO;
 import com.example.EmployeeManager.dto.SalaryHistoryReturnDTO;
-import com.example.EmployeeManager.entity.SalaryHistory;
 import com.example.EmployeeManager.representation.SalaryHistoryRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

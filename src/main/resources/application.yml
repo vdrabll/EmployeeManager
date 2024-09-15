@@ -1,9 +1,6 @@
 spring:
   application:
     name: EmployeeManager
-  sql:
-    init:
-      mode: never
 
   jpa:
     hibernate:

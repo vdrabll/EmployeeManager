@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.LeaveCreateDTO;
+import com.example.EmployeeManager.dto.create.LeaveCreateDTO;
 import com.example.EmployeeManager.dto.LeaveReturnDTO;
 import com.example.EmployeeManager.entity.Leave;
 import com.example.EmployeeManager.service.interfaces.LeaveService;

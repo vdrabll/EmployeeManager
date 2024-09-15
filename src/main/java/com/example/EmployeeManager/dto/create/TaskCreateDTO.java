@@ -1,4 +1,4 @@
-package com.example.EmployeeManager.dto;
+package com.example.EmployeeManager.dto.create;
 
 import com.example.EmployeeManager.enums.TaskPriority;
 import com.example.EmployeeManager.enums.TaskStatus;

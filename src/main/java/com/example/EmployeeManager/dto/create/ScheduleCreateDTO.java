@@ -1,8 +1,7 @@
-package com.example.EmployeeManager.dto;
+package com.example.EmployeeManager.dto.create;
 
 import com.example.EmployeeManager.enums.LocationType;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

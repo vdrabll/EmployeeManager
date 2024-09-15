@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.SalaryCoefficientCreateDTO;
+import com.example.EmployeeManager.dto.create.SalaryCoefficientCreateDTO;
 import com.example.EmployeeManager.dto.SalaryCoefficientReturnDTO;
 import com.example.EmployeeManager.entity.SalaryCoefficients;
 import com.example.EmployeeManager.service.SalaryCoefficientsService;

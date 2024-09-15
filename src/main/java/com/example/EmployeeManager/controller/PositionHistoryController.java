@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.PositionHistoryCreateDTO;
+import com.example.EmployeeManager.dto.create.PositionHistoryCreateDTO;
 import com.example.EmployeeManager.dto.PositionHistoryReturnDTO;
 import com.example.EmployeeManager.representation.PositionHistoryRepresentation;
 import io.swagger.v3.oas.annotations.Operation;

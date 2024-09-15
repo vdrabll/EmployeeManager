@@ -17,7 +17,7 @@ public class SalaryHistoryRepresentation {
         return toDto(salaryHistoryService.getSalaryHistoryById(id));
     }
 
-    SalaryHistoryReturnDTO toDto(SalaryHistory salaryHistory) {
+    public SalaryHistoryReturnDTO toDto(SalaryHistory salaryHistory) {
         return new SalaryHistoryReturnDTO(salaryHistory.getId(), salaryHistory.getSalaryDate(), salaryHistory.getAmount(), salaryHistory.getType());
     }
 
