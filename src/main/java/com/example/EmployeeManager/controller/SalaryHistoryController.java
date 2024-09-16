@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/salary-histories")
 public class SalaryHistoryController {
-
     private final SalaryHistoryRepresentation salaryHistoryRepresentation;
 
     @Operation(description = "Get salary history by giving id to project by giving id", method = "GET")
@@ -33,5 +32,4 @@ public class SalaryHistoryController {
                                                                    @ParameterObject Pageable pageable) {
         return salaryHistoryRepresentation.getSalaryHistoryOfEmployee(id, pageable);
     }
-
 }

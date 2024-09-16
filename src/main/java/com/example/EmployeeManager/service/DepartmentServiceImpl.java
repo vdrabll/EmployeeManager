@@ -1,11 +1,10 @@
 package com.example.EmployeeManager.service;
 
-import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.entity.Employee;
+import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.DepartmentRepository;
-import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeService employeeService;
-    private final EmployeeRepository employeeRepository;
 
     @Transactional
     public Department save(Department data) {
@@ -55,13 +53,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Department> getAll( Pageable pageable) {
+    public Page<Department> getAll(Pageable pageable) {
         return departmentRepository.findAll(pageable);
     }
 
 
     @Transactional
-    public Department updateDepartmentById( Department department) {
+    public Department updateDepartmentById(Department department) {
         Department departmentById = getDepartmentById(department.getId());
         departmentById.setName(department.getName());
         departmentById.setLocation(department.getLocation());
@@ -81,7 +79,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void removeEmployeeFromDepartment(Long id, Long employeeId) {
         Department department = getDepartmentById(id);
         Employee employee = employeeService.getEmployeeById(employeeId);
-        if (!employee.getDepartment().stream().noneMatch(department1 -> department1.getId().equals(department.getId()))) {
+        if (employee.getDepartment().stream().anyMatch(department1 -> department1.getId().equals(department.getId()))) {
             department.getEmployees().remove(employee);
             departmentRepository.save(department);
         }

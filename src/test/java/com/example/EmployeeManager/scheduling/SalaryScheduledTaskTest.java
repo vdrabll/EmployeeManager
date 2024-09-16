@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.scheduling;
 
-import com.example.EmployeeManager.dto.SalaryCoefficientReturnDTO;
+import com.example.EmployeeManager.dto.returnDTO.SalaryCoefficientReturnDTO;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.entity.PositionHistory;
@@ -54,7 +54,7 @@ class SalaryScheduledTaskTest {
                 .email("alla@sber.ru")
                 .build());
 
-        coefficients = new SalaryCoefficientReturnDTO(1L, LocalDate.now(), BigDecimal.valueOf(0.30), BigDecimal.valueOf(0.40));
+        coefficients = new SalaryCoefficientReturnDTO(1L, BigDecimal.valueOf(0.30), BigDecimal.valueOf(0.40));
     }
 
     @Transactional
@@ -69,7 +69,7 @@ class SalaryScheduledTaskTest {
     void calculateAdvance() {
         BigDecimal data = SalaryScheduledTask.calculateAdvance(employee, coefficients.advancePercentage());
         System.out.println(data);
-        Assertions.assertTrue(data.compareTo(BigDecimal.valueOf(6000)) == 0);
+        Assertions.assertEquals(0, data.compareTo(BigDecimal.valueOf(6000)));
 
     }
 
@@ -77,13 +77,13 @@ class SalaryScheduledTaskTest {
     void calculateSalary() {
         BigDecimal data = SalaryScheduledTask.calculateSalary(employee, coefficients.advancePercentage());
         System.out.println(data);
-        Assertions.assertTrue(data.compareTo(BigDecimal.valueOf(14000)) == 0);
+        Assertions.assertEquals(0, data.compareTo(BigDecimal.valueOf(14000)));
     }
 
     @Test
     void calculateBonus() {
         BigDecimal data = SalaryScheduledTask.calculateBonus(employee, coefficients.bonusPercentage());
         System.out.println(data);
-        Assertions.assertTrue(data.compareTo(BigDecimal.valueOf(8000)) == 0);
+        Assertions.assertEquals(0, data.compareTo(BigDecimal.valueOf(8000)));
     }
 }

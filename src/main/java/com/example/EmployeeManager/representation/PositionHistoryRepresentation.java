@@ -1,8 +1,8 @@
 package com.example.EmployeeManager.representation;
 
 
-import com.example.EmployeeManager.dto.create.PositionHistoryCreateDTO;
-import com.example.EmployeeManager.dto.PositionHistoryReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.PositionHistoryCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.PositionHistoryReturnDTO;
 import com.example.EmployeeManager.entity.PositionHistory;
 import com.example.EmployeeManager.service.interfaces.PositionHistoryService;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +26,13 @@ public class PositionHistoryRepresentation {
     }
 
     public PositionHistoryReturnDTO toDTO(PositionHistory positionHistory) {
-        PositionHistoryReturnDTO dto = new PositionHistoryReturnDTO(positionHistory.getId(),    positionHistory.getStartDate(), positionHistory.getEndDate());
-        return dto;
+        return new PositionHistoryReturnDTO(positionHistory.getId(),    positionHistory.getStartDate(), positionHistory.getEndDate());
     }
 
     public  PositionHistory fromDTO(PositionHistoryCreateDTO dto) {
-        PositionHistory positionHistory = PositionHistory.builder()
+        return PositionHistory.builder()
                 .startDate(dto.startDate())
                 .endDate(dto.endDate())
                 .build();
-        return positionHistory;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.create.PositionCreateDTO;
-import com.example.EmployeeManager.dto.PositionReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.PositionCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.PositionReturnDTO;
 import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.service.interfaces.PositionService;
 import lombok.RequiredArgsConstructor;

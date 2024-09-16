@@ -1,4 +1,4 @@
-package com.example.EmployeeManager.dto;
+package com.example.EmployeeManager.dto.returnDTO;
 
 import java.math.BigDecimal;
 

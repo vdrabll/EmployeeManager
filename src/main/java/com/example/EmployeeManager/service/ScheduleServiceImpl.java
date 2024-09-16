@@ -11,15 +11,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
-
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public  Schedule createSchedule(Schedule schedule) {
+    public Schedule createSchedule(Schedule schedule) {
         if (scheduleRepository.findByEmployee_IdAndDate(schedule.getEmployee().getId(), schedule.getDate()).isEmpty()) {
             return scheduleRepository.save(schedule);
         } else {

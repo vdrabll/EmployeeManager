@@ -1,9 +1,10 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.create.DepartmentCreateDTO;
-import com.example.EmployeeManager.dto.DepartmentReturnDTO;
-import com.example.EmployeeManager.dto.EmployeeReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.DepartmentCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.DepartmentReturnDTO;
+import com.example.EmployeeManager.dto.returnDTO.EmployeeReturnDTO;
 import com.example.EmployeeManager.representation.DepartmentRepresentation;
+import com.example.EmployeeManager.representation.EmployeeRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -57,7 +58,7 @@ public class DepartmentController {
     }
 
     @Operation(description = "Add employee by given id to department", method = "POST")
-    @PostMapping("{departmentId}/employees/{employeeId}")
+    @PostMapping("/{departmentId}/employees/{employeeId}")
     public void addEmployeeToDepartment(@PathVariable("departmentId") Long departmentId,
                                         @PathVariable("employeeId") Long employeeId) {
         departmentRepresentation.addEmployeeToDepartment(departmentId, employeeId);

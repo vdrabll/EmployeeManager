@@ -26,5 +26,4 @@ public class Project {
 
     @Column(nullable = false)
     private String description;
-
 }

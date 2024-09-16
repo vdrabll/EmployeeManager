@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.create.LeaveCreateDTO;
-import com.example.EmployeeManager.dto.LeaveReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.LeaveCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.LeaveReturnDTO;
 import com.example.EmployeeManager.representation.LeaveRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

@@ -15,24 +15,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
+    private final EmployeeRepository employeeRepository;
 
     @Transactional
-    public Employee addEmployee(Employee newEmployee) {// найти роль в базе данных и присвоить
-       if (!employeeRepository.existsByEmail(newEmployee.getEmail())) {
-           newEmployee.setRole(AuthRole.EMPLOYEE);
-           newEmployee.setIsWorkingNow(true);
-           return employeeRepository.save(newEmployee);
-       } else {
-           log.error("Record with {} already exists", newEmployee.getEmail());
-           throw new RecordExistException(newEmployee.getEmail());
-       }
+    public Employee addEmployee(Employee newEmployee) {
+        if (!employeeRepository.existsByEmail(newEmployee.getEmail())) {
+            newEmployee.setRole(AuthRole.EMPLOYEE);
+            newEmployee.setIsWorkingNow(true);
+            return employeeRepository.save(newEmployee);
+        } else {
+            log.error("Record with {} already exists", newEmployee.getEmail());
+            throw new RecordExistException(newEmployee.getEmail());
+        }
     }
 
     @Transactional
     public Employee addChief(Employee newEmployee) {
-        if (employeeRepository.existsByEmail(newEmployee.getEmail())) {
+        if (!employeeRepository.existsByEmail(newEmployee.getEmail())) {
             newEmployee.setRole(AuthRole.CHIEF);
             newEmployee.setIsWorkingNow(true);
             return employeeRepository.save(newEmployee);
@@ -42,7 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    private final EmployeeRepository employeeRepository;
     @Transactional
     public Employee getEmployeeById(Long id) {
         return employeeRepository.findById(id).orElseThrow(()
@@ -69,13 +70,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAllByDepartment_Id(departmentId, pageable);
     }
 
-   @Transactional
+    @Transactional
     public Employee updateEmployee(Long id, Employee employee) {
         Employee employeeById = getEmployeeById(id);
         employeeById.setIsWorkingNow(employee.getIsWorkingNow());
         employeeById.setFullName(employee.getFullName());
         employeeById.setEmail(employee.getEmail());
-        return  employeeById;
+        return employeeById;
     }
 
     @Transactional
@@ -84,5 +85,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeById.setIsWorkingNow(false);
         return employeeById;
     }
-
 }

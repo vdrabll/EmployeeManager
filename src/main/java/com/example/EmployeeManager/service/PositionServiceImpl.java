@@ -10,22 +10,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PositionServiceImpl implements PositionService {
     private final PositionRepository positionRepository;
 
-
     @Transactional
     public Position createPosition(Position position) {
-       if (positionRepository.findByNameAndSalary(position.getName(), position.getSalary()).isEmpty()) {
-           return positionRepository.save(position);
-       } else {
-           log.error("Record with {} already exists", position.getId());
-           throw new RecordExistException(position.getName());
-       }
+        if (positionRepository.findByNameAndSalary(position.getName(), position.getSalary()).isEmpty()) {
+            return positionRepository.save(position);
+        } else {
+            log.error("Record with {} already exists", position.getId());
+            throw new RecordExistException(position.getName());
+        }
     }
 
     @Transactional(readOnly = true)

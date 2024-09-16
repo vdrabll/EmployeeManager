@@ -5,7 +5,6 @@ import com.example.EmployeeManager.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
@@ -43,5 +42,4 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "project_id")
     private Project project;
-
 }

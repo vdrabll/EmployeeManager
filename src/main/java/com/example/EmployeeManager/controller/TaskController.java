@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.create.TaskCreateDTO;
+import com.example.EmployeeManager.dto.createDTO.TaskCreateDTO;
 import com.example.EmployeeManager.dto.TaskReturnDTO;
 import com.example.EmployeeManager.representation.TaskRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/tasks")
 public class TaskController {
-
     private final TaskRepresentation taskRepresentation;
 
     @Operation(description = "Get task by giving id", method = "GET")

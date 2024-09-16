@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.create.EmployeeCreateDTO;
-import com.example.EmployeeManager.dto.EmployeeReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.EmployeeCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.EmployeeReturnDTO;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class EmployeeRepresentation {
     }
 
     public EmployeeReturnDTO addChief(EmployeeCreateDTO newEmployee) {
-        return toDTO(employeeService.addEmployee(fromDto(newEmployee)));
+        return toDTO(employeeService.addChief(fromDto(newEmployee)));
     }
 
     public EmployeeReturnDTO updateEmployee(Long id, EmployeeCreateDTO employee) {

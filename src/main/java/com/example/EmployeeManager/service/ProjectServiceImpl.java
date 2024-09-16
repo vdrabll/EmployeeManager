@@ -22,7 +22,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final EmployeeService employeeService;
 
     @Transactional
-    public  Project createProject(Project project) {
+    public Project createProject(Project project) {
         if (!projectRepository.existsByName(project.getName())) {
             return projectRepository.save(project);
         } else {
@@ -43,7 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Transactional
-    public Project updateProject(Long id ,Project project) {
+    public Project updateProject(Long id, Project project) {
         Project projectById = getProjectById(id);
         projectById.setName(project.getName());
         projectById.setDescription(project.getDescription());

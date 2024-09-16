@@ -1,4 +1,4 @@
-package com.example.EmployeeManager.dto.create;
+package com.example.EmployeeManager.dto.createDTO;
 
 import com.example.EmployeeManager.enums.LeaveStatus;
 import com.example.EmployeeManager.enums.LeaveType;

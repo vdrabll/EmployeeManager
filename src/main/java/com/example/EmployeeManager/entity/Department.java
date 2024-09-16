@@ -26,5 +26,4 @@ public class Department {
     @JoinTable(name = "employees_departments", joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
     private List<Employee> employees;
-
 }

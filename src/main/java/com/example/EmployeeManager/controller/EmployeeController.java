@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.create.EmployeeCreateDTO;
-import com.example.EmployeeManager.dto.EmployeeReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.EmployeeCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.EmployeeReturnDTO;
 import com.example.EmployeeManager.representation.EmployeeRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +24,7 @@ public class EmployeeController {
         return employeeRepresentation.getEmployeeById(id);
     }
 
-
-    @Operation(description = "Get employee by given id", method = "GET")
+    @Operation(description = "Get all employee", method = "GET")
     @GetMapping
     public Page<EmployeeReturnDTO> getAllEmployee(@ParameterObject Pageable pageable) {
         return employeeRepresentation.getAllEmployee(pageable);
@@ -34,15 +33,14 @@ public class EmployeeController {
     @Operation(description = "Create new employee", method = "POST")
     @PostMapping("/employee")
     public EmployeeReturnDTO createNewEmployee(@RequestBody EmployeeCreateDTO newEmployee) {
-        return employeeRepresentation.addChief(newEmployee);
+        return employeeRepresentation.addEmployee(newEmployee);
     }
 
     @Operation(description = "Create new chief", method = "POST")
     @PostMapping("/chief")
     public EmployeeReturnDTO createNewChief(@RequestBody EmployeeCreateDTO newEmployee) {
-        return employeeRepresentation.addEmployee(newEmployee);
+        return employeeRepresentation.addChief(newEmployee);
     }
-
 
     @Operation(description = "Update employee by given id", method = "PATCH")
     @PatchMapping("/{id}")

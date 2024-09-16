@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.create.PositionCreateDTO;
-import com.example.EmployeeManager.dto.PositionReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.PositionCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.PositionReturnDTO;
 import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.representation.PositionRepresentation;
 import io.swagger.v3.oas.annotations.Operation;

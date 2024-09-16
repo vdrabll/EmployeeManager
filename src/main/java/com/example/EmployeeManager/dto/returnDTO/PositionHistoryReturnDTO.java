@@ -1,6 +1,4 @@
-package com.example.EmployeeManager.dto;
-
-import jakarta.validation.constraints.NotEmpty;
+package com.example.EmployeeManager.dto.returnDTO;
 
 import java.time.LocalDate;
 

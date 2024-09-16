@@ -1,4 +1,4 @@
-package com.example.EmployeeManager.dto.create;
+package com.example.EmployeeManager.dto.createDTO;
 
 import com.example.EmployeeManager.enums.SalaryType;
 import jakarta.validation.constraints.NotEmpty;

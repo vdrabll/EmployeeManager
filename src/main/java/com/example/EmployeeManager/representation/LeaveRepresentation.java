@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.create.LeaveCreateDTO;
-import com.example.EmployeeManager.dto.LeaveReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.LeaveCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.LeaveReturnDTO;
 import com.example.EmployeeManager.entity.Leave;
 import com.example.EmployeeManager.service.interfaces.LeaveService;
 import lombok.RequiredArgsConstructor;
@@ -36,22 +36,20 @@ public class LeaveRepresentation {
     }
 
     public LeaveReturnDTO toDto(Leave leave) {
-        LeaveReturnDTO dto = new LeaveReturnDTO(
+        return new LeaveReturnDTO(
                 leave.getId(),
                 leave.getStartDate(),
                 leave.getEndDate(),
                 leave.getType(),
                 leave.getStatus());
-        return dto;
     }
 
     public Leave fromDto(LeaveCreateDTO dto) {
-        Leave leave = Leave.builder()
+        return Leave.builder()
                 .startDate(dto.startDate())
                 .endDate(dto.endDate())
                 .type(dto.type())
                 .status(dto.status())
                 .build();
-        return leave;
     }
 }

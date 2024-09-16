@@ -4,28 +4,24 @@ import com.example.EmployeeManager.entity.Leave;
 import com.example.EmployeeManager.exceptions.InvalidLeaveDateExeption;
 import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.exceptions.RecordExistException;
-import com.example.EmployeeManager.repository.DepartmentRepository;
 import com.example.EmployeeManager.repository.LeaveRepository;
-import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.LeaveService;
-import com.example.EmployeeManager.service.interfaces.TaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 
 @Slf4j
 @Service
+@Validated
 @RequiredArgsConstructor
 public class LeaveServiceImpl implements LeaveService {
-    private final TaskService taskService;
-    private final DepartmentRepository departmentRepository;
     private final LeaveRepository leaveRepository;
-    private final EmployeeService employeeService;
 
    @Transactional
    public Leave createLeave(Leave leave) {
@@ -53,11 +49,9 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Transactional
     public void rescheduleLeave(Long id, Leave leave) {
-
         if (leave.getStartDate().isBefore(LocalDate.now())) {
             throw new InvalidLeaveDateExeption("Нельзя перенести отпуск на прошедшую дату.");
         }
-
         Leave leaveById = getLeaveById(id);
         leaveById.setType(leave.getType());
         leaveById.setStartDate(leave.getStartDate());
@@ -72,19 +66,4 @@ public class LeaveServiceImpl implements LeaveService {
            throw new NotFoundException("Нельзя удалить запись, которой нет в базе данных.");
        }
    }
-
-//    @Transactional
-//    public void createLeaveRequestTask(Long employeeId, Leave taskData) {
-//        Employee employee = employeeService.getEmployeeById(employeeId);
-//        Long department = employee.getDepartment().getLast().getId();
-//        Employee chief = departmentRepository.findChiefByDepartmentId(department).orElseThrow( () ->
-//                new IllegalStateException("There is no chief in department!"));
-//        Task task = Task.builder()
-//                .name(String.format("Назначить отпуск для %s",employee.getFullName()))
-//                .description(String.format("Желаемые даты: %s - %s, тип: %s", taskData.getStartDate(), taskData.getEndDate(), taskData.getType()))
-//                .type("Отпуск")
-//                .priority(TaskPriority.HIGH)
-//                .build();
-//        taskService.assignTaskToEmployee(chief.getId(), task, Pageable.unpaged());
-//    }
 }

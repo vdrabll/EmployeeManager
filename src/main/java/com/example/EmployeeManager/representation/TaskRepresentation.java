@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.create.TaskCreateDTO;
+import com.example.EmployeeManager.dto.createDTO.TaskCreateDTO;
 import com.example.EmployeeManager.dto.TaskReturnDTO;
 import com.example.EmployeeManager.entity.Task;
 import com.example.EmployeeManager.service.interfaces.TaskService;
@@ -17,7 +17,6 @@ public class TaskRepresentation {
     public TaskReturnDTO getTaskById(Long id) {
         return toDto(taskService.getTaskById(id));
     }
-
 
     public TaskReturnDTO saveTask(TaskCreateDTO task) {
         return toDto(taskService.saveTask(fromDto(task)));
@@ -55,7 +54,7 @@ public class TaskRepresentation {
 
 
     private Task fromDto(TaskCreateDTO dto) {
-        Task task = Task.builder()
+        return Task.builder()
                 .name(dto.name())
                 .description(dto.description())
                 .priority(dto.priority())
@@ -63,6 +62,5 @@ public class TaskRepresentation {
                 .status(dto.status())
                 .type(dto.type())
                 .build();
-        return task;
     }
 }

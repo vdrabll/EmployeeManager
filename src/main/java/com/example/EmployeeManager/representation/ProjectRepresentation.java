@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.create.ProjectCreateDTO;
-import com.example.EmployeeManager.dto.ProjectReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.ProjectCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.ProjectReturnDTO;
 import com.example.EmployeeManager.entity.Project;
 import com.example.EmployeeManager.service.interfaces.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -49,10 +49,9 @@ public class ProjectRepresentation {
     }
 
     Project fromDTO(ProjectCreateDTO dto) {
-        Project project = Project.builder()
+        return Project.builder()
                 .name(dto.name())
                 .description(dto.description())
                 .build();
-        return project;
     }
 }

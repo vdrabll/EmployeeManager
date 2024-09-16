@@ -1,6 +1,6 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.create.ScheduleCreateDTO;
+import com.example.EmployeeManager.dto.createDTO.ScheduleCreateDTO;
 import com.example.EmployeeManager.dto.ScheduleReturnDTO;
 import com.example.EmployeeManager.entity.Schedule;
 import com.example.EmployeeManager.service.interfaces.ScheduleService;
@@ -33,8 +33,7 @@ public class ScheduleRepresentation {
     }
 
     public ScheduleReturnDTO toDto(Schedule schedule) {
-        ScheduleReturnDTO dto = new ScheduleReturnDTO(schedule.getId(), schedule.getDate(), schedule.getStartTime(), schedule.getEndTime(), schedule.getLocation());
-        return dto;
+        return new ScheduleReturnDTO(schedule.getId(), schedule.getDate(), schedule.getStartTime(), schedule.getEndTime(), schedule.getLocation());
     }
 
     public Schedule fromDto(ScheduleCreateDTO dto) {

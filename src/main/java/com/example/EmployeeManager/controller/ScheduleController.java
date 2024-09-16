@@ -1,7 +1,7 @@
 package com.example.EmployeeManager.controller;
 
 
-import com.example.EmployeeManager.dto.create.ScheduleCreateDTO;
+import com.example.EmployeeManager.dto.createDTO.ScheduleCreateDTO;
 import com.example.EmployeeManager.dto.ScheduleReturnDTO;
 import com.example.EmployeeManager.representation.ScheduleRepresentation;
 import io.swagger.v3.oas.annotations.Operation;

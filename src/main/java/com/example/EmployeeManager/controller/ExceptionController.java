@@ -18,14 +18,14 @@ public class ExceptionController {
     @ExceptionHandler(InvalidLeaveDateExeption.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO InvalidLeaveDateExeption(InvalidLeaveDateExeption e) {
+    public ErrorDTO InvalidLeaveDateException(InvalidLeaveDateExeption e) {
         return new ErrorDTO(HttpStatus.BAD_REQUEST.name(), e.getLocalizedMessage());
     }
 
     @ExceptionHandler(InvalidTaskStatusExeption.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO InvalidTaskStatusExeption(InvalidTaskStatusExeption e) {
+    public ErrorDTO InvalidTaskStatusExсeption(InvalidTaskStatusExeption e) {
         return new ErrorDTO(HttpStatus.BAD_REQUEST.name(), e.getLocalizedMessage());
     }
 

@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,7 +19,7 @@ public class SalaryHistoryServiceImpl implements SalaryHistoryService {
     private final SalaryHistoryRepository salaryHistoryRepository;
 
     @Transactional
-    public  SalaryHistory createSalaryHistory(SalaryHistory salary) {
+    public SalaryHistory createSalaryHistory(SalaryHistory salary) {
         if (salaryHistoryRepository.findByEmployeeAndSalaryDateAndType(salary.getEmployee(), salary.getSalaryDate(), salary.getType()).isEmpty()) {
             return salaryHistoryRepository.save(salary);
         } else {

@@ -1,11 +1,9 @@
-package com.example.EmployeeManager.dto;
+package com.example.EmployeeManager.dto.returnDTO;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public record SalaryCoefficientReturnDTO(
         Long id,
-        LocalDate date,
         BigDecimal advancePercentage,
         BigDecimal bonusPercentage) {
 }

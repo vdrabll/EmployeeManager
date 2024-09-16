@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Employee {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,7 +38,7 @@ public class Employee {
     private List<PositionHistory> positionHistoryList;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role_name", nullable = false)
     private AuthRole role;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
@@ -52,5 +51,4 @@ public class Employee {
     @JoinTable(name = "employees_projects", joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> projects;
-
 }

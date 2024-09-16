@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -19,7 +18,6 @@ public class SalaryCoefficients {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate year;
     private BigDecimal advancePercentage;
     private BigDecimal bonusPercentage;
 }

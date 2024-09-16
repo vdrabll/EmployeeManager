@@ -23,7 +23,7 @@ create table if not exists employee(
         is_working_now      boolean default true,
         full_name           varchar(100) not null,
         email               varchar(255) not null,
-        role                varchar not null
+        role_name           varchar not null
 );
 
 create table if not exists position_history(
@@ -92,7 +92,6 @@ create table if not exists task(
 
 create table if not exists salary_coefficients (
         id                   bigserial primary key,
-        year                 date not null,
         advance_percentage   numeric(38,2) not null,
         bonus_percentage     numeric(38,2) not null
 );

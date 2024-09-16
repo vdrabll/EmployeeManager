@@ -6,11 +6,9 @@ import com.example.EmployeeManager.enums.TaskStatus;
 import com.example.EmployeeManager.exceptions.InvalidTaskStatusExeption;
 import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.exceptions.RecordExistException;
-import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.TaskRepository;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.TaskService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,9 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
-
-    private final EmployeeRepository employeeRepository;
-
     private final TaskRepository taskRepository;
     private final EmployeeService employeeService;
 
@@ -32,11 +27,6 @@ public class TaskServiceImpl implements TaskService {
     public Task getTaskById(Long id) {
         return taskRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(String.format("Задача по данномому id: %s не найдена", id)));
-    }
-
-    @Transactional()
-    public Page<Task> getAllTasks(Pageable pageable) {
-        return taskRepository.findAll(pageable);
     }
 
     @Transactional

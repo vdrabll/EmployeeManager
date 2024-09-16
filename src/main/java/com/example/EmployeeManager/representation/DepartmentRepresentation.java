@@ -1,8 +1,8 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.create.DepartmentCreateDTO;
-import com.example.EmployeeManager.dto.DepartmentReturnDTO;
-import com.example.EmployeeManager.dto.EmployeeReturnDTO;
+import com.example.EmployeeManager.dto.createDTO.DepartmentCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.DepartmentReturnDTO;
+import com.example.EmployeeManager.dto.returnDTO.EmployeeReturnDTO;
 import com.example.EmployeeManager.entity.Department;
 import com.example.EmployeeManager.service.interfaces.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -53,11 +53,10 @@ public class DepartmentRepresentation {
     }
 
     public Department fromDTO(DepartmentCreateDTO dto) {
-        Department department = Department.builder()
+        return Department.builder()
                 .name(dto.name())
                 .location(dto.location())
                 .build();
-        return department;
     }
 
     public DepartmentReturnDTO toDTO(Department department) {
