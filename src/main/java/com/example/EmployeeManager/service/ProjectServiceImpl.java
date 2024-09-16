@@ -2,16 +2,19 @@ package com.example.EmployeeManager.service;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Project;
+import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.ProjectRepository;
 import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.ProjectService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
@@ -19,23 +22,24 @@ public class ProjectServiceImpl implements ProjectService {
     private final EmployeeService employeeService;
 
     @Transactional
-    public Project getProjectById(Long id) {
-        return projectRepository.findById(id).orElseThrow(()
-                -> new NoSuchElementException(String.format("Проект по данному id: %s не найден", id)));
-    }
-
-    @Transactional
-    public  Project createProject(Project project) {
-        if (projectRepository.findByName(project.getName()).isEmpty()) {
+    public Project createProject(Project project) {
+        if (!projectRepository.existsByName(project.getName())) {
             return projectRepository.save(project);
         } else {
+            log.error("Record with {} already exists", project.getId());
             throw new RecordExistException(project.getName());
         }
     }
 
-    @Transactional
-    public void deleteProjectById(Long id) {
-        projectRepository.delete(getProjectById(id));
+    @Transactional(readOnly = true)
+    public Project getProjectById(Long id) {
+        return projectRepository.findById(id).orElseThrow(()
+                -> new NotFoundException(String.format("Проект по данному id: %s не найден", id)));
+    }
+
+    @Override
+    public Page<Project> getAll(Pageable pageable) {
+        return projectRepository.findAll(pageable);
     }
 
     @Transactional
@@ -46,13 +50,14 @@ public class ProjectServiceImpl implements ProjectService {
         return projectById;
     }
 
-    @Transactional // TODO: исправить
+    @Transactional
     public Project addEmployeeToProject(Long id, Long empId) {
         Project project = getProjectById(id);
         Employee employee = employeeService.getEmployeeById(empId);
         if (project.getEmployees().stream().noneMatch(emp -> emp.getId().equals(empId))) {
+
             project.getEmployees().add(employee);
-            employee.getProjects().add(project);
+            projectRepository.save(project);
         } else {
             throw new RuntimeException(String.format("Сотрудник по данному id: %s уже найден в списке участников проекта", id));
         }
@@ -64,11 +69,20 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = getProjectById(id);
         Employee employee = employeeService.getEmployeeById(empId);
         if (project.getEmployees().stream().anyMatch(emp -> emp.getId().equals(empId))) {
-            employee.getDepartment().remove(project);
             project.getEmployees().remove(employee);
+            projectRepository.save(project);
         } else {
-           throw new RuntimeException(String.format("Сотрудник по данному id: %s не найден в списке участников проекта", id));
+            throw new RuntimeException(String.format("Сотрудник по данному id: %s не найден в списке участников проекта", id));
         }
         return project;
+    }
+
+    @Transactional
+    public void deleteProjectById(Long id) {
+        if (projectRepository.findById(id).isPresent()) {
+            projectRepository.delete(getProjectById(id));
+        } else {
+            throw new NotFoundException("Нельзя удалить запись, которой нет в базе данных.");
+        }
     }
 }

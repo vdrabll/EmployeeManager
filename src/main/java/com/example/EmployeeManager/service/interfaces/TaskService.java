@@ -10,11 +10,12 @@ public interface TaskService {
 
     Task saveTask(Task task);
 
-    Task updateTask(Long id, Task task);
+    Task updateTask(Task task, Long id);
 
     void deleteTask(Long id);
 
-    Page<Task> getAllTasksOfEmployee(Long employeeId, Pageable pageable);
+    Page<Task> getAllTasksOfEmployee(Long id, Pageable pageable);
 
     Task assignTaskToEmployee(Long employeeId, Task task, Pageable pageable);
+
 }

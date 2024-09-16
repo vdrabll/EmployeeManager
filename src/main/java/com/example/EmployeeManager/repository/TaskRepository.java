@@ -16,10 +16,10 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    Optional<Task> findByNameAndEmployee(String name, Employee employee);
-    Page<Task> findAllByPriority(TaskPriority priority, @ParameterObject Pageable pageable);
-    Page<Task> findAllByDeadlineAfter(LocalDate deadline, @ParameterObject Pageable pageable);
-    Page<Task> findAllByType(String type, @ParameterObject Pageable pageable);
-    Page<Task> findAllByProject(Project project, @ParameterObject Pageable pageable);
-    Page<Task> findAllByEmployee(Employee employee, @ParameterObject Pageable pageable);
+    boolean existsByNameAndEmployee_id(String name, Long employee);
+    Page<Task> findAllByPriority(TaskPriority priority, Pageable pageable);
+    Page<Task> findAllByDeadlineAfter(LocalDate deadline, Pageable pageable);
+    Page<Task> findAllByType(String type, Pageable pageable);
+    Page<Task> findAllByProject(Project project, Pageable pageable);
+    Page<Task> findAllByEmployee_Id(Long employeeId, Pageable pageable);
 }

@@ -3,6 +3,8 @@ package com.example.EmployeeManager.service.interfaces;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.entity.PositionHistory;
+import com.example.EmployeeManager.enums.AuthRole;
+import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.PositionHistoryRepository;
 import com.example.EmployeeManager.repository.PositionRepository;
@@ -43,11 +45,13 @@ class PositionHistoryServiceTest {
     @BeforeEach
     void setUp() {
         employee = employeeRepository.save( Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .fullName("Cтоматин Петр Петрович")
                 .email("example@sber.ru")
                 .build());
 
         firstPosition = positionRepository.save(Position.builder().grade((short)4)
+
                 .name("Младший специалист")
                 .salary(BigDecimal.valueOf(20000))
                 .build());
@@ -87,7 +91,7 @@ class PositionHistoryServiceTest {
         assertEquals(internPosition.getName(), intern.getPosition().getName());
         assertTrue(internPosition.getSalary().compareTo(intern.getPosition().getSalary()) == 0);
         assertEquals(internPosition.getGrade(), intern.getPosition().getGrade());
-        assertThrows(NoSuchElementException.class, () -> positionHistoryService.getPositionById(22L).getPosition());
+        assertThrows(NotFoundException.class, () -> positionHistoryService.getPositionById(22L).getPosition());
     }
 
     @Test
@@ -111,7 +115,7 @@ class PositionHistoryServiceTest {
         positionHistoryRepository.findAll().forEach(positionHistory -> {
             System.out.println(positionHistory.getStartDate());
         });
-        assertThrows(NoSuchElementException.class, () -> positionHistoryService.getPositionById(intern.getId()));
+        assertThrows(NotFoundException.class, () -> positionHistoryService.getPositionById(intern.getId()));
     }
 
     @Test

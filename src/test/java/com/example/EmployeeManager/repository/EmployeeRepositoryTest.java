@@ -1,7 +1,6 @@
 package com.example.EmployeeManager.repository;
 
 import com.example.EmployeeManager.entity.Employee;
-import com.example.EmployeeManager.entity.Role;
 import com.example.EmployeeManager.enums.AuthRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,31 +17,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest()
 @ActiveProfiles("test")
 class EmployeeRepositoryTest {
-
     @Autowired
     private EmployeeRepository employeeRepository;
-    @Autowired
-    private RoleRepository roleRepository;
     private Employee chief;
     private Employee employee;
-    private Role roleEmployee;
-    private Role roleChief;
     private Pageable pageable;
 
     @BeforeEach
     void setUp() {
         pageable = Pageable.unpaged();
-        roleChief = roleRepository.save(new Role(AuthRole.CHIEF));
-        roleEmployee = roleRepository.save(new Role(AuthRole.EMPLOYEE));
+
         chief = Employee.builder()
-                .role(roleChief)
+                .role(AuthRole.CHIEF)
                 .isWorkingNow(true)
                 .fullName( "Иванов Алексей Петрович")
                 .email("example@sber.ru")
                 .build();
         employeeRepository.save(chief);
         employee = Employee.builder().
-                role(roleEmployee)
+                role(AuthRole.EMPLOYEE)
                 .isWorkingNow(true)
                 .fullName( "Аров Иван Иванович")
                 .email("example@yandex.ru")
@@ -58,7 +51,7 @@ class EmployeeRepositoryTest {
     @Test
     void findEmployeeByIsWorkingNowEquals() {
         List<Employee> employees = List.of(chief, employee);
-        List<Employee> employeeByIsWorkingNowEquals = employeeRepository.findAllByIsWorkingNowEquals(true, pageable).stream().toList();
+        List<Employee> employeeByIsWorkingNowEquals = employeeRepository.findAllByIsWorkingNowTrue(pageable).stream().toList();
         assertThat(employeeByIsWorkingNowEquals).isNotEmpty();
         assertThat(employeeByIsWorkingNowEquals).isEqualTo(employees);
     }

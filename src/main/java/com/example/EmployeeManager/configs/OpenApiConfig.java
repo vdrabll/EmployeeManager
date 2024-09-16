@@ -12,7 +12,6 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
         Info info = new Info();
         info.description("Employee manager app");
-        return new OpenAPI()
-                .info(info);
+        return new OpenAPI();
     }
 }

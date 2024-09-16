@@ -2,8 +2,10 @@ package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Leave;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.enums.LeaveStatus;
 import com.example.EmployeeManager.enums.LeaveType;
+import com.example.EmployeeManager.exceptions.InvalidLeaveDateExeption;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.LeaveRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -40,6 +42,7 @@ class LeaveServiceTest {
     void setUp() {
         pageable = Pageable.unpaged();
         employee = Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .isWorkingNow(true)
                 .fullName( "Иванов Петр Петрович")
                 .email("example@sber.ru")
@@ -94,9 +97,21 @@ class LeaveServiceTest {
                 .status(LeaveStatus.ON_REVIEW)
                 .type(LeaveType.UNPAID)
                 .employee(employee)
-                .startDate(LocalDate.of(2022, 7,14))
-                .endDate(LocalDate.of(2022, 7,15))
+                .startDate(LocalDate.of(2026, 7,13))
+                .endDate(LocalDate.of(2026, 8,1))
                 .build();
+        leaveService.createLeave(newLeave);
+        Leave createdLeave = leaveService.getLeaveById(newLeave.getId());
+        assertEquals(newLeave.getId(),createdLeave.getId());
+        Leave unvalidLeave = Leave.builder()
+                .status(LeaveStatus.ON_REVIEW)
+                .type(LeaveType.UNPAID)
+                .employee(employee)
+                .startDate(LocalDate.of(2022, 8,13))
+                .endDate(LocalDate.of(2022, 8,17))
+                .build();
+        assertThrows(InvalidLeaveDateExeption.class, () -> leaveService.createLeave(unvalidLeave));
+
     }
 
     @Test
@@ -113,8 +128,8 @@ class LeaveServiceTest {
                 .status(LeaveStatus.AGREED)
                 .type(LeaveType.SICK)
                 .employee(employee)
-                .startDate(LocalDate.of(2022, 7,10))
-                .endDate(LocalDate.of(2022, 7,15))
+                .startDate(LocalDate.of(2025, 7,10))
+                .endDate(LocalDate.of(2025, 7,15))
                 .build();
         leaveService.rescheduleLeave(sickLeave.getId(), newLeave);
         Optional<Leave> byId = leaveRepository.findById(sickLeave.getId());

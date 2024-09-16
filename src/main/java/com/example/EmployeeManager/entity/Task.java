@@ -34,8 +34,6 @@ public class Task {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    private Short estimate;
-
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
@@ -44,5 +42,4 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "project_id")
     private Project project;
-
 }

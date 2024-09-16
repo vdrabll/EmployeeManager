@@ -2,7 +2,9 @@ package com.example.EmployeeManager.service.interfaces;
 
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Schedule;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.enums.LocationType;
+import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.ScheduleRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -36,6 +38,7 @@ class ScheduleServiceTest {
     @BeforeEach
     void setUp() {
         employee = employeeRepository.save( Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .fullName("Люричева Лара Петровна")
                 .email("cuty@sber.ru")
                 .build());
@@ -83,7 +86,7 @@ class ScheduleServiceTest {
     @Test
     void deleteScheduleById() {
         scheduleService.deleteScheduleById(monday.getId());
-        assertThrows(NoSuchElementException.class, () -> scheduleService.deleteScheduleById(monday.getId()));
+        assertThrows(NotFoundException.class, () -> scheduleService.deleteScheduleById(monday.getId()));
     }
 
     @Test
@@ -119,6 +122,6 @@ class ScheduleServiceTest {
         assertEquals(monday.getStartTime(), scheduleById.getStartTime());
         assertEquals(monday.getEndTime(), scheduleById.getEndTime());
         assertEquals(monday.getLocation(), scheduleById.getLocation());
-        assertThrows(NoSuchElementException.class, () -> scheduleService.getScheduleById(100L));
+        assertThrows(NotFoundException.class, () -> scheduleService.getScheduleById(100L));
     }
 }

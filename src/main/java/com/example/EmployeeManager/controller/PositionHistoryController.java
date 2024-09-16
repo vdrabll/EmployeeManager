@@ -1,41 +1,33 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.PositionHistoryDTO;
+import com.example.EmployeeManager.dto.createDTO.PositionHistoryCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.PositionHistoryReturnDTO;
 import com.example.EmployeeManager.representation.PositionHistoryRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @AllArgsConstructor
 @RequestMapping("/position-histories")
 public class PositionHistoryController {
-
     private final PositionHistoryRepresentation positionHistoryRepresentation;
 
-    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
-    @Operation(description = "Returns position history record by giving id", method = "GET", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of record", required = true)
-    })
+    @Operation(description = "Return position history by giving id", method = "GET")
     @GetMapping("/{id}")
-    public PositionHistoryDTO getPositionHistoryById(@PathVariable Long id) {
+    public PositionHistoryReturnDTO getPositionHistoryById(@PathVariable Long id) {
         return positionHistoryRepresentation.getPositionHistoryById(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_CHIEF')")
-    @Operation(description = "Create position history record", method = "POST")
+    @Operation(description = "create new position", method = "POST")
     @PostMapping
-    public PositionHistoryDTO createPositionHistory(@RequestBody PositionHistoryDTO positionHistory) {
+    public PositionHistoryReturnDTO createPositionHistory(@RequestBody PositionHistoryCreateDTO positionHistory) {
         return positionHistoryRepresentation.createPositionHistory(positionHistory);
     }
 
-    @PreAuthorize("hasRole('ROLE_CHIEF')")
-    @Operation(description = "Delete position history record by giving id", method = "GET", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of project", required = true)
-    })
+    @Operation(description = "Delete position by giving id", method = "DELETE")
     @DeleteMapping("/{id}")
     public void deletePositionHistoryById(@PathVariable("id") Long id) {
         positionHistoryRepresentation.deletePositionHistoryById(id);

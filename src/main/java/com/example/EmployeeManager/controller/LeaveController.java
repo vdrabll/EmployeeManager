@@ -1,63 +1,50 @@
 package com.example.EmployeeManager.controller;
 
-import com.example.EmployeeManager.dto.LeaveDTO;
+import com.example.EmployeeManager.dto.createDTO.LeaveCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.LeaveReturnDTO;
 import com.example.EmployeeManager.representation.LeaveRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/leaves")
 public class LeaveController {
     private final LeaveRepresentation leaveRepresentation;
 
-    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
-    @Operation(description = "Returns leave by giving id", method = "GET", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
-    })
+    @Operation(description = "Get leave in database by id", method = "POST")
     @GetMapping("/{id}")
-    public LeaveDTO getLeaveById(@PathVariable Long id) {
+    public LeaveReturnDTO getLeaveById(@PathVariable Long id) {
         return leaveRepresentation.getLeaveById(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
-    @Operation(description = "Create new leave in database", method = "POST")
-    @PostMapping()
-    public LeaveDTO createLeave( LeaveDTO leave) {
+    @Operation(description = "Create new leave", method = "POST")
+    @PostMapping
+    public LeaveReturnDTO createLeave(LeaveCreateDTO leave) {
         return leaveRepresentation.createLeave(leave);
     }
 
-    @PreAuthorize("hasRole('ROLE_CHIEF')")
-    @Operation(description = "Delete leave by giving id", method = "DELETE", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
-    })
+    @Operation(description = "Delete leave by giving id", method = "DELETE")
     @DeleteMapping("/{id}")
     public void deleteLeaveById(@PathVariable Long id) {
         leaveRepresentation.deleteLeaveById(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
-    @Operation(description = "Reschedule leave by giving id", method = "PUT", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of leave", required = true)
-    })
-    @PutMapping("/{id}")
-    public void rescheduleLeave(@PathVariable Long id, @RequestBody LeaveDTO leave) {
+    @Operation(description = "Reschedule leave by giving id", method = "PATCH")
+    @PatchMapping("/{id}")
+    public void rescheduleLeave(@PathVariable Long id, @RequestBody LeaveCreateDTO leave) {
         leaveRepresentation.rescheduleLeave(id, leave);
     }
 
-    @PreAuthorize("hasRole('ROLE_CHIEF') or hasRole('ROLE_EMPLOYEE')")
-    @Operation(description = "Return all leaves by giving employee id", method = "PUT", parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "Unique identifier of employee", required = true)
-    })
+    @Operation(description = "Return all leaves by giving employee id", method = "PUT")
     @GetMapping("/employee/{id}")
-    public Page<LeaveDTO> getAllByEmployee(@PathVariable Long id, @ParameterObject Pageable pageable) {
+    public Page<LeaveReturnDTO> getAllByEmployee(@PathVariable Long id, @ParameterObject Pageable pageable) {
         return leaveRepresentation.getAllByEmployee(id, pageable);
     }
 }

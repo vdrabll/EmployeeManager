@@ -1,5 +1,6 @@
 package com.example.EmployeeManager.entity;
 
+import com.example.EmployeeManager.enums.AuthRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,15 +29,17 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Schedule> schedule;
 
-    @ManyToMany(mappedBy = "employees" , cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @JoinTable(name = "employees_departments", joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id"))
     private List<Department> department;
 
     @OneToMany(mappedBy = "employee")
     private List<PositionHistory> positionHistoryList;
 
-    @ManyToOne( cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_name", nullable = false)
+    private AuthRole role;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<SalaryHistory> salaryHistories;
@@ -44,7 +47,8 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @ManyToMany(mappedBy = "employees" , cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @JoinTable(name = "employees_projects", joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> projects;
-
 }

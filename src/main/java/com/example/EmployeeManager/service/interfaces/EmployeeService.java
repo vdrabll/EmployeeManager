@@ -21,4 +21,7 @@ public interface EmployeeService {
     Page<Employee> getAllDismissedEmployees(Pageable pageable);
 
     Page<Employee> getAllEmployeesByDepartment(Long departmentId, Pageable pageable);
+
+    Employee addChief(Employee newEmployee);
+
 }

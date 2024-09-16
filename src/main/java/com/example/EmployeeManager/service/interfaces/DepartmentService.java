@@ -14,13 +14,13 @@ public interface DepartmentService {
 
     Department save(Department department);
 
-    Department updateDepartmentById(Long id, Department department);
+    Department updateDepartmentById(Department department);
 
     void delete(Department department);
 
     Page<Employee> getAllEmployeesFromDepartment(Long id, Pageable pageable);
 
-    void addEmployeeToDepartment(Long id, Long newEmployeeId);
+    void addEmployeeToDepartment(Long departmentId, Long employeeId);
 
     void removeEmployeeFromDepartment(Long id, Long employeeId);
 }

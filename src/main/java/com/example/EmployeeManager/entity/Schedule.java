@@ -33,5 +33,4 @@ public class Schedule {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LocationType location;
-
 }

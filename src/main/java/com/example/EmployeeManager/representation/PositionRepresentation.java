@@ -1,6 +1,7 @@
 package com.example.EmployeeManager.representation;
 
-import com.example.EmployeeManager.dto.PositionDTO;
+import com.example.EmployeeManager.dto.createDTO.PositionCreateDTO;
+import com.example.EmployeeManager.dto.returnDTO.PositionReturnDTO;
 import com.example.EmployeeManager.entity.Position;
 import com.example.EmployeeManager.service.interfaces.PositionService;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,11 @@ import org.springframework.stereotype.Component;
 public class PositionRepresentation {
     private final PositionService positionService;
 
-    public PositionDTO getPositionById(Long id) {
+    public PositionReturnDTO getPositionById(Long id) {
         return toDTO(positionService.getPositionById(id));
     }
 
-    public PositionDTO createPosition(Position position) {
+    public PositionReturnDTO createPosition(Position position) {
         return toDTO(positionService.createPosition(position));
     }
 
@@ -23,21 +24,19 @@ public class PositionRepresentation {
         positionService.deletePositionById(id);
     }
 
-    public PositionDTO updatePosition( Long id, PositionDTO position) {
+    public PositionReturnDTO updatePosition(Long id, PositionCreateDTO position) {
         return toDTO(positionService.updatePosition(id, fromDTO(position)));
     }
 
-    PositionDTO toDTO(Position position) {
-        PositionDTO dto = new PositionDTO(position.getGrade(), position.getSalary(), position.getName());
-        return dto;
+    PositionReturnDTO toDTO(Position position) {
+        return new PositionReturnDTO(position.getId(), position.getGrade(), position.getSalary(), position.getName());
     }
 
-    Position fromDTO(PositionDTO dto) {
-        Position position = Position.builder()
-                .grade(dto.getGrade())
-                .salary(dto.getSalary())
-                .name(dto.getName())
+    Position fromDTO(PositionCreateDTO dto) {
+        return Position.builder()
+                .grade(dto.grade())
+                .salary(dto.salary())
+                .name(dto.name())
                 .build();
-        return position;
     }
 }

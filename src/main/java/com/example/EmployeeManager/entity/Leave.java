@@ -34,5 +34,4 @@ public class Leave {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LeaveStatus status;
-
 }

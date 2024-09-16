@@ -3,8 +3,10 @@ package com.example.EmployeeManager.service.interfaces;
 import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Project;
 import com.example.EmployeeManager.entity.Task;
+import com.example.EmployeeManager.enums.AuthRole;
 import com.example.EmployeeManager.enums.TaskPriority;
 import com.example.EmployeeManager.enums.TaskStatus;
+import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.repository.EmployeeRepository;
 import com.example.EmployeeManager.repository.ProjectRepository;
 import com.example.EmployeeManager.repository.TaskRepository;
@@ -18,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,11 +48,13 @@ class TaskServiceTest {
     @BeforeEach
     void setUp() {
         developer = employeeRepository.save(Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .fullName("Иванко Петр Петрович")
                 .email("iKnowHtml@sber.ru")
                 .build());
 
         tester = employeeRepository.save(Employee.builder()
+                .role(AuthRole.EMPLOYEE)
                 .fullName("Иванко Петр Петрович")
                 .email("IWishIHadAFrandLikeMe@sber.ru")
                 .build());
@@ -68,7 +71,6 @@ class TaskServiceTest {
                 .employee(developer)
                 .project(project)
                 .deadline(LocalDate.of(2024, 6, 20))
-                .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
@@ -80,7 +82,6 @@ class TaskServiceTest {
                 .employee(tester)
                 .project(project)
                 .deadline(LocalDate.of(2024, 7, 5))
-                .estimate((short) 10)
                 .type( "база данных")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
@@ -90,7 +91,6 @@ class TaskServiceTest {
                 .priority(TaskPriority.HIGH)
                 .employee(tester)
                 .deadline(LocalDate.of(2024, 8, 5))
-                .estimate((short) 10)
                 .type( "подготовка")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
@@ -116,16 +116,17 @@ class TaskServiceTest {
 
     @Test
     void saveTask() {
-        Task newDeveloperTask = taskService.saveTask(Task.builder()
-                .name("Прочитать книгу по java 20")
+        Task newDeveloperTask = Task.builder()
+                .name("пройти курс в пульсе")
                 .description("освежить знания")
                 .priority(TaskPriority.HIGH)
                 .employee(developer)
                 .deadline(LocalDate.of(2024, 8, 5))
-                .estimate((short) 10)
                 .type( "личные дела")
                 .status(TaskStatus.NOT_STARTED)
-                .build());
+                .build();
+        taskRepository.findAll().forEach(task -> System.out.println(task.getName()));
+        taskService.saveTask(newDeveloperTask);
         Task savedTask = taskService.getTaskById(newDeveloperTask.getId());
         assertNotNull(savedTask);
         assertEquals(newDeveloperTask.getId(), savedTask.getId());
@@ -138,17 +139,17 @@ class TaskServiceTest {
     @Test
     void updateTask() {
         Task newData = Task.builder()
-                .name("Прочитать книгу по Братья Карамазовы")
+                .id(23L)
+                .name("Прочитать книгу Братья Карамазовы")
                 .description(" ")
                 .priority(TaskPriority.HIGH)
                 .employee(tester)
                 .deadline(LocalDate.of(2024, 9, 5))
-                .estimate((short) 10)
-                .type( "собеседование")
+                .type("собеседование")
                 .status(TaskStatus.BACKLOG)
                 .build();
-        taskService.updateTask(testerPersonalTask.getId(), newData);
-        Task updatedTask = taskService.getTaskById(testerPersonalTask.getId());
+        taskService.updateTask(newData, testerTask.getId());
+        Task updatedTask = taskService.getTaskById(testerTask.getId());
         assertEquals(newData.getName(), updatedTask.getName());
         assertEquals(newData.getDescription(), updatedTask.getDescription());
         assertEquals(newData.getPriority(), updatedTask.getPriority());
@@ -160,7 +161,7 @@ class TaskServiceTest {
     @Test
     void deleteTask() {
         taskService.deleteTask(testerPersonalTask.getId());
-        assertThrows(NoSuchElementException.class, () -> taskService.getTaskById(testerPersonalTask.getId()));
+        assertThrows(NotFoundException.class, () -> taskService.getTaskById(testerPersonalTask.getId()));
         assertEquals(taskService.getAllTasksOfEmployee(tester.getId(), Pageable.unpaged()).getSize(), 1);
     }
 
@@ -183,7 +184,6 @@ class TaskServiceTest {
                 .priority(TaskPriority.HIGH)
                 .employee(developer)
                 .deadline(LocalDate.of(2024, 9, 10))
-                .estimate((short) 10)
                 .type( "проект")
                 .status(TaskStatus.NOT_STARTED)
                 .build());
