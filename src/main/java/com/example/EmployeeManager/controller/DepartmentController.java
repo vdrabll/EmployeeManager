@@ -4,7 +4,6 @@ import com.example.EmployeeManager.dto.createDTO.DepartmentCreateDTO;
 import com.example.EmployeeManager.dto.returnDTO.DepartmentReturnDTO;
 import com.example.EmployeeManager.dto.returnDTO.EmployeeReturnDTO;
 import com.example.EmployeeManager.representation.DepartmentRepresentation;
-import com.example.EmployeeManager.representation.EmployeeRepresentation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
