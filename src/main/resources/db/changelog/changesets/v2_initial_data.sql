@@ -1,7 +1,7 @@
 
 INSERT INTO department (id, name, location) VALUES (1, 'Отдел продаж', 'Москва');
 INSERT INTO department (id, name, location) VALUES (2, 'Отдел разработки', 'Новосибирск');
-INSERT INTO department (id, name, location) VALUES (3,                                                                                                                                                                                                          'Финансовый отдел', 'Ангора');
+INSERT INTO department (id, name, location) VALUES (3, 'Отдел разработки', ' Владимир');
 
 
 INSERT INTO position (id, grade, salary, name) VALUES (1, 1, 50000, 'Младший специалист');
