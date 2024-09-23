@@ -16,4 +16,6 @@ public interface ScheduleService {
 
     Page<Schedule> getScheduleOfEmployee(Long employeeId, Pageable pageable);
 
+    void createDailySchedule();
+
 }

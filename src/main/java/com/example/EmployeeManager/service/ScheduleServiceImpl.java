@@ -1,9 +1,12 @@
 package com.example.EmployeeManager.service;
 
+import com.example.EmployeeManager.entity.Employee;
 import com.example.EmployeeManager.entity.Schedule;
+import com.example.EmployeeManager.enums.LocationType;
 import com.example.EmployeeManager.exceptions.NotFoundException;
 import com.example.EmployeeManager.exceptions.RecordExistException;
 import com.example.EmployeeManager.repository.ScheduleRepository;
+import com.example.EmployeeManager.service.interfaces.EmployeeService;
 import com.example.EmployeeManager.service.interfaces.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +15,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final EmployeeService employeeService;
 
     @Transactional
     public Schedule createSchedule(Schedule schedule) {
@@ -37,6 +45,23 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional(readOnly = true)
     public Page<Schedule> getScheduleOfEmployee(Long employeeId, Pageable pageable) {
         return scheduleRepository.findAllByEmployee_Id(employeeId, pageable);
+    }
+
+    @Override
+    public void createDailySchedule() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startTime = today.atTime(9, 0);
+        LocalDateTime endTime = today.atTime(18, 0);
+        List<Employee> employees = employeeService.getAllWorkingEmployees(Pageable.unpaged()).toList();
+        employees.forEach(employee -> {
+            Schedule schedule = createSchedule(Schedule.builder()
+                    .date(today)
+                    .startTime(startTime)
+                    .endTime(endTime)
+                    .employee(employee)
+                    .location(LocationType.OFFICE).build());
+            employee.getSchedule().add(schedule);
+        });
     }
 
     @Transactional

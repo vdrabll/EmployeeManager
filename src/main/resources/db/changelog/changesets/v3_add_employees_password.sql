@@ -1,0 +1,1 @@
+alter table if exists employee add column password varchar(255) not null default '$2a$10$7K5bXwrF4rb0Zh/qRwoZjOxgoTKbIa3eLsxDE14Fhc.5ekEfkvdje';

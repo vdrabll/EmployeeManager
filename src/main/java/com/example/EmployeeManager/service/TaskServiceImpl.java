@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -54,6 +56,14 @@ public class TaskServiceImpl implements TaskService {
         employeeById.getTasks().add(taskById);
         taskById.setEmployee(employeeById);
         return taskById;
+    }
+
+    @Override
+    public void checkTasks() {
+        taskRepository.findAll()
+                .stream()
+                .filter(task -> task.getDeadline().isAfter(LocalDate.now()))
+                .forEach(task -> task.setStatus(TaskStatus.EXPIRED));
     }
 
     @Transactional

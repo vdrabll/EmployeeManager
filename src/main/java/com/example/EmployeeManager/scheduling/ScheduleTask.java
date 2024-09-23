@@ -18,29 +18,15 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ScheduleTask {
-    private final EmployeeServiceImpl employeeService;
     private final ScheduleService scheduleService;
 
     /**
      * Метод создания расписания сотрудника.
-     * Планировщик срабатывает в полночь каждый день с понедельника по пятницу. Создается запись в таблице Schedule для
-     * каждого работающего в данный момент.
+     * Планировщик срабатывает в полночь каждый день с понедельника по пятницу.
      */
     @Transactional
     @Scheduled(cron = "0 0 0  * * MON-FRI")
     public void createSchedule() {
-        LocalDate today = LocalDate.now();
-        LocalDateTime startTime = today.atTime(9, 0);
-        LocalDateTime endTime = today.atTime(18, 0);
-        List<Employee> employees = employeeService.getAllWorkingEmployees(Pageable.unpaged()).toList();
-        employees.forEach(employee -> {
-            Schedule schedule = scheduleService.createSchedule(Schedule.builder()
-                    .date(today)
-                    .startTime(startTime)
-                    .endTime(endTime)
-                    .employee(employee)
-                    .location(LocationType.OFFICE).build());
-            employee.getSchedule().add(schedule);
-        });
+       scheduleService.createDailySchedule();
     }
 }

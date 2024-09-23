@@ -3,7 +3,11 @@ package com.example.EmployeeManager.entity;
 import com.example.EmployeeManager.enums.AuthRole;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -12,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
+public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +29,9 @@ public class Employee {
 
     @Column(nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Schedule> schedule;
@@ -51,4 +58,34 @@ public class Employee {
     @JoinTable(name = "employees_projects", joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> projects;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(role);
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isWorkingNow;
+    }
 }

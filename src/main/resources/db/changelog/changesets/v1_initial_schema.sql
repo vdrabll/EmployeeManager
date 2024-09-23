@@ -7,7 +7,7 @@ create type task_status as enum('BACKLOG','NOT_STARTED','IN_WORK','DONE','EXPIRE
 
 create table if not exists department(
          id                  bigserial primary key,
-         name                varchar(255) not null unique ,
+         name                varchar(255) not null,
          location            varchar(255) not null
 );
 

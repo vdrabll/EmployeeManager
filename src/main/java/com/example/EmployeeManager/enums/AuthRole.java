@@ -1,16 +1,15 @@
 package com.example.EmployeeManager.enums;
 
 import org.apache.coyote.BadRequestException;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Arrays;
 
-public enum AuthRole {
+public enum AuthRole implements GrantedAuthority {
     CHIEF, EMPLOYEE;
 
-    public static AuthRole fromString(String role) {
-        for (AuthRole value: values()) {
-            if (value.name().equalsIgnoreCase(role)) return value;
-        }
-        return null;
+    @Override
+    public String getAuthority() {
+        return name();
     }
 }

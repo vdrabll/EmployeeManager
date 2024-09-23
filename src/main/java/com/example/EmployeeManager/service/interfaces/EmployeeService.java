@@ -3,8 +3,9 @@ package com.example.EmployeeManager.service.interfaces;
 import com.example.EmployeeManager.entity.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface EmployeeService {
+public interface EmployeeService extends UserDetailsService {
 
     Employee getEmployeeById(Long id);
 

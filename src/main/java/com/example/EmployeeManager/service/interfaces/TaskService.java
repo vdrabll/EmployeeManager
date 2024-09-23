@@ -18,4 +18,5 @@ public interface TaskService {
 
     Task assignTaskToEmployee(Long employeeId, Task task, Pageable pageable);
 
+    void checkTasks();
 }
